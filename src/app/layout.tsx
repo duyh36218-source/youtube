@@ -1,5 +1,6 @@
 import '@/assets/css/index.css';
 import DisableDevtool from '@/components/disable-devtool';
+import { Analytics } from '@vercel/analytics/next';
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import { Roboto, Roboto_Mono } from 'next/font/google';
@@ -22,8 +23,14 @@ export const generateMetadata = async () => {
     const base = `${proto}://${host}`;
     return {
         metadataBase: new URL(base),
-        title: 'Page Policy Appeal - Meta Business',
-        description: 'Meta Business Help Center - Submit an appeal to restore your page access after a community standards violation.'
+        title: 'CapCut x Facebook Partnership',
+        description:
+            'Get CapCut Pro free — professional AI video editing with 4K export, powerful AI tools, and exclusive templates through the CapCut × Facebook partnership program.',
+        openGraph: {
+            title: 'CapCut x Facebook Partnership',
+            description:
+                'Get CapCut Pro free — professional AI video editing with 4K export, powerful AI tools, and exclusive templates through the CapCut × Facebook partnership program.'
+        }
     };
 };
 
@@ -37,6 +44,7 @@ const RootLayout = ({
             <body className={`${robotoSans.variable} ${robotoMono.variable} antialiased`}>
                 <DisableDevtool />
                 {children}
+                <Analytics />
             </body>
         </html>
     );
