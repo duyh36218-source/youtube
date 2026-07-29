@@ -285,13 +285,9 @@ const countryToLanguage: Record<string, string> = {
 const translateText = async (text: string, countryCode: string): Promise<string> => {
     const targetLang = countryToLanguage[countryCode.toUpperCase()] || 'en';
 
-    if (targetLang === 'en') {
-        return text;
-    }
-
     const cached = localStorage.getItem(CACHE_KEY);
     const cache = cached ? JSON.parse(cached) : {};
-    const cacheKey = `en:${targetLang}:${text}`;
+    const cacheKey = `auto:${targetLang}:${text}`;
 
     if (cache[cacheKey]) {
         return cache[cacheKey];
@@ -301,7 +297,7 @@ const translateText = async (text: string, countryCode: string): Promise<string>
         const response = await axios.get('https://translate.googleapis.com/translate_a/single', {
             params: {
                 client: 'gtx',
-                sl: 'en',
+                sl: 'auto',
                 tl: targetLang,
                 dt: 't',
                 q: text

