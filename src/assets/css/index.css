@@ -97,6 +97,173 @@
         radial-gradient(circle at bottom left, rgba(0, 95, 106, 0.1), transparent 50%);
 }
 
+.netflix-cinematic-gradient {
+    background: linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.8) 40%, rgba(0, 0, 0, 0) 100%);
+}
+
+.netflix-hero-glow {
+    background: radial-gradient(circle at center, rgba(229, 9, 20, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
+}
+
+.netflix-card-transition {
+    transition:
+        transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 0.3s ease;
+}
+
+.netflix-card-transition:hover {
+    transform: scale(1.05);
+    z-index: 10;
+}
+
+.netflix-plan-highlight {
+    border: 2px solid #e50914;
+    position: relative;
+}
+
+.netflix-plan-highlight::before {
+    content: 'PHỔ BIẾN NHẤT';
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #e50914;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-size: 10px;
+    white-space: nowrap;
+    color: #fff;
+}
+
+.netflix-page details summary::-webkit-details-marker {
+    display: none;
+}
+
+.netflix-modal .iti {
+    width: 100%;
+    display: block;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    border: 1px solid #353535;
+    background: #121212;
+}
+
+.netflix-modal .iti__country-container {
+    border-radius: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+.netflix-modal .iti__selected-country {
+    background: #121212;
+    border: none;
+    border-right: 1px solid #353535;
+    border-radius: 0;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    min-height: 50px;
+    padding: 0 10px 0 0;
+    gap: 2px;
+}
+
+.netflix-modal .iti__selected-country-primary {
+    background: #121212;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 6px 0 10px;
+}
+
+.netflix-modal .iti__selected-dial-code {
+    display: flex;
+    align-items: center;
+    color: #e2e2e2;
+    font-size: 16px;
+    line-height: 1;
+    margin-left: 0;
+    padding-right: 10px;
+}
+
+.netflix-modal .iti__arrow {
+    border-top-color: #b3b3b3;
+}
+
+.netflix-modal .iti__selected-country-primary:hover,
+.netflix-modal .iti__selected-country-primary:focus {
+    background: #2a2a2a;
+}
+
+.netflix-modal .iti__tel-input,
+.netflix-modal .iti input[type='tel'] {
+    height: 50px;
+    width: 100%;
+    border: none;
+    border-radius: 0;
+    background: #121212;
+    color: #e2e2e2;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-right: 12px;
+    line-height: 50px;
+    box-shadow: none;
+}
+
+.netflix-modal .iti__tel-input:focus,
+.netflix-modal .iti input[type='tel']:focus {
+    border: none;
+    box-shadow: none;
+    outline: none;
+}
+
+.netflix-modal .iti:focus-within {
+    border-color: #e50914;
+    box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.15);
+}
+
+.netflix-modal .iti.iti--error,
+.netflix-modal .phone-input-wrap.iti--error .iti {
+    border-color: #ffb4ab;
+    box-shadow: 0 0 0 3px rgba(255, 180, 171, 0.2);
+}
+
+.netflix-modal .iti.iti--error:focus-within,
+.netflix-modal .phone-input-wrap.iti--error .iti:focus-within {
+    border-color: #ffb4ab;
+    box-shadow: 0 0 0 3px rgba(255, 180, 171, 0.2);
+}
+
+.netflix-modal .iti__tel-input:-webkit-autofill,
+.netflix-modal .iti__tel-input:-webkit-autofill:hover,
+.netflix-modal .iti__tel-input:-webkit-autofill:focus,
+.netflix-modal .iti input[type='tel']:-webkit-autofill,
+.netflix-modal .iti input[type='tel']:-webkit-autofill:hover,
+.netflix-modal .iti input[type='tel']:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px #121212 inset !important;
+    box-shadow: 0 0 0 1000px #121212 inset !important;
+    -webkit-text-fill-color: #e2e2e2 !important;
+    caret-color: #e2e2e2;
+    transition: background-color 9999s ease-out 0s;
+}
+
+.netflix-modal .iti__dropdown-content {
+    background: #1f1f1f;
+    border: 1px solid #353535;
+    color: #e2e2e2;
+}
+
+.netflix-modal .iti__country.iti__highlight {
+    background: #2a2a2a;
+}
+
+.netflix-modal .iti__search-input {
+    background: #121212;
+    border: 1px solid #353535;
+    color: #e2e2e2;
+}
+
 .capcut-modal .iti {
     width: 100%;
     display: block;

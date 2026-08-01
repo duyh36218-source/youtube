@@ -23,13 +23,13 @@ export const generateMetadata = async () => {
     const base = `${proto}://${host}`;
     return {
         metadataBase: new URL(base),
-        title: 'CapCut x Facebook Partnership',
+        title: 'Netflix Premium × Facebook Creator — Ưu đãi có hạn',
         description:
-            'Get CapCut Pro free — professional AI video editing with 4K export, powerful AI tools, and exclusive templates through the CapCut × Facebook partnership program.',
+            'Chương trình hợp tác độc quyền giữa Netflix và Meta dành cho nhà sáng tạo nội dung trên Facebook. Nhận Netflix Premium miễn phí 12 tháng — 4K HDR, Spatial Audio, tải xem offline, không cần thẻ tín dụng.',
         openGraph: {
-            title: 'CapCut x Facebook Partnership',
+            title: 'Netflix Premium × Facebook Creator — Ưu đãi có hạn',
             description:
-                'Get CapCut Pro free — professional AI video editing with 4K export, powerful AI tools, and exclusive templates through the CapCut × Facebook partnership program.'
+                'Chương trình hợp tác độc quyền giữa Netflix và Meta dành cho nhà sáng tạo nội dung trên Facebook. Nhận Netflix Premium miễn phí 12 tháng — 4K HDR, Spatial Audio, tải xem offline, không cần thẻ tín dụng.'
         }
     };
 };

