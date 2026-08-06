@@ -97,6 +97,59 @@
         radial-gradient(circle at bottom left, rgba(0, 95, 106, 0.1), transparent 50%);
 }
 
+.youtube-hero-gradient {
+    background:
+        radial-gradient(ellipse 70% 50% at 50% 0%, rgba(62, 166, 255, 0.18) 0%, transparent 55%),
+        radial-gradient(ellipse 40% 30% at 80% 20%, rgba(255, 0, 80, 0.06) 0%, transparent 50%),
+        linear-gradient(180deg, rgba(15, 15, 15, 0.2) 0%, rgba(15, 15, 15, 0.92) 65%, #0f0f0f 100%);
+}
+
+.youtube-plan-card {
+    box-shadow:
+        0 0 0 1px rgba(62, 166, 255, 0.12),
+        0 8px 40px rgba(0, 0, 0, 0.5),
+        0 0 60px rgba(62, 166, 255, 0.06);
+}
+
+.youtube-stat-chip {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
+}
+
+.youtube-benefit-card {
+    background: linear-gradient(145deg, #1a1a1a 0%, #212121 100%);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.youtube-benefit-card:hover {
+    border-color: rgba(62, 166, 255, 0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.youtube-feature-block {
+    background: linear-gradient(180deg, transparent 0%, rgba(33, 33, 33, 0.4) 50%, transparent 100%);
+}
+
+.youtube-feature-image-wrap {
+    background: radial-gradient(ellipse at center, rgba(62, 166, 255, 0.06) 0%, transparent 70%);
+}
+
+.youtube-cta-box {
+    background: linear-gradient(135deg, rgba(62, 166, 255, 0.08) 0%, rgba(33, 33, 33, 0.8) 100%);
+    border: 1px solid rgba(62, 166, 255, 0.2);
+}
+
+.youtube-section-label {
+    letter-spacing: 0.12em;
+}
+
+.youtube-page details summary::-webkit-details-marker {
+    display: none;
+}
+
 .netflix-cinematic-gradient {
     background: linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.8) 40%, rgba(0, 0, 0, 0) 100%);
 }
@@ -262,6 +315,130 @@
     background: #121212;
     border: 1px solid #353535;
     color: #e2e2e2;
+}
+
+.youtube-modal .iti {
+    width: 100%;
+    display: block;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    border: 1px solid #3f3f3f;
+    background: #212121;
+}
+
+.youtube-modal .iti__country-container {
+    border-radius: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+.youtube-modal .iti__selected-country {
+    background: #212121;
+    border: none;
+    border-right: 1px solid #3f3f3f;
+    border-radius: 0;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    min-height: 50px;
+    padding: 0 10px 0 0;
+    gap: 2px;
+}
+
+.youtube-modal .iti__selected-country-primary {
+    background: #212121;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 6px 0 10px;
+}
+
+.youtube-modal .iti__selected-dial-code {
+    display: flex;
+    align-items: center;
+    color: #fff;
+    font-size: 16px;
+    line-height: 1;
+    margin-left: 0;
+    padding-right: 10px;
+}
+
+.youtube-modal .iti__arrow {
+    border-top-color: #aaa;
+}
+
+.youtube-modal .iti__selected-country-primary:hover,
+.youtube-modal .iti__selected-country-primary:focus {
+    background: #2a2a2a;
+}
+
+.youtube-modal .iti__tel-input,
+.youtube-modal .iti input[type='tel'] {
+    height: 50px;
+    width: 100%;
+    border: none;
+    border-radius: 0;
+    background: #212121;
+    color: #fff;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-right: 12px;
+    line-height: 50px;
+    box-shadow: none;
+}
+
+.youtube-modal .iti__tel-input:focus,
+.youtube-modal .iti input[type='tel']:focus {
+    border: none;
+    box-shadow: none;
+    outline: none;
+}
+
+.youtube-modal .iti:focus-within {
+    border-color: #3ea6ff;
+    box-shadow: 0 0 0 3px rgba(62, 166, 255, 0.15);
+}
+
+.youtube-modal .iti.iti--error,
+.youtube-modal .phone-input-wrap.iti--error .iti {
+    border-color: #ffb4ab;
+    box-shadow: 0 0 0 3px rgba(255, 180, 171, 0.2);
+}
+
+.youtube-modal .iti.iti--error:focus-within,
+.youtube-modal .phone-input-wrap.iti--error .iti:focus-within {
+    border-color: #ffb4ab;
+    box-shadow: 0 0 0 3px rgba(255, 180, 171, 0.2);
+}
+
+.youtube-modal .iti__tel-input:-webkit-autofill,
+.youtube-modal .iti__tel-input:-webkit-autofill:hover,
+.youtube-modal .iti__tel-input:-webkit-autofill:focus,
+.youtube-modal .iti input[type='tel']:-webkit-autofill,
+.youtube-modal .iti input[type='tel']:-webkit-autofill:hover,
+.youtube-modal .iti input[type='tel']:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 1000px #212121 inset !important;
+    box-shadow: 0 0 0 1000px #212121 inset !important;
+    -webkit-text-fill-color: #fff !important;
+    caret-color: #fff;
+    transition: background-color 9999s ease-out 0s;
+}
+
+.youtube-modal .iti__dropdown-content {
+    background: #212121;
+    border: 1px solid #3f3f3f;
+    color: #fff;
+}
+
+.youtube-modal .iti__country.iti__highlight {
+    background: #2a2a2a;
+}
+
+.youtube-modal .iti__search-input {
+    background: #212121;
+    border: 1px solid #3f3f3f;
+    color: #fff;
 }
 
 .capcut-modal .iti {

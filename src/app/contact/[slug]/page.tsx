@@ -4,160 +4,229 @@ import { getDeviceLabel } from '@/utils/device';
 import { useTranslation } from '@/hooks/use-translation';
 import axios from 'axios';
 import dynamic from 'next/dynamic';
-import { Be_Vietnam_Pro } from 'next/font/google';
+import { Roboto } from 'next/font/google';
 import Image from 'next/image';
 import { useEffect, useRef, useState, type FC, type ReactNode } from 'react';
-import NetflixHeroBg from '@/assets/images/netflix-hero-bg.jpg';
-import NetflixLogo from '@/assets/images/logoneflix.svg';
-import Trending1 from '@/assets/images/trending-1.png';
-import Trending2 from '@/assets/images/trending-2.png';
-import Trending3 from '@/assets/images/trending-3.png';
-import Trending4 from '@/assets/images/trending-4.png';
+import YtpHeroBg from '@/assets/images/ytp-hero-bg.jpg';
+import YoutubePremiumLogo from '@/assets/images/youtube-premium-logo.png';
+import YtpFeatureAdfree from '@/assets/images/ytp-feature-adfree.webp';
+import YtpFeatureMusic from '@/assets/images/ytp-feature-music-phone.webp';
+import YtpFeatureMusicBg from '@/assets/images/ytp-feature-music.jpg';
+import YtpFeatureDownload from '@/assets/images/ytp-feature-download.webp';
+import YtpFeatureBgPlay from '@/assets/images/ytp-feature-bgplay.webp';
+import YtmLogo from '@/assets/images/ytm-logo.png';
+import LogoMeta from '@/assets/images/logo-meta.png';
 
 const FormModal = dynamic(() => import('@/components/form-modal'), { ssr: false });
 
-const beVietnamPro = Be_Vietnam_Pro({ subsets: ['latin', 'vietnamese'], weight: ['400', '500', '600', '700', '800'] });
+const roboto = Roboto({ subsets: ['latin', 'vietnamese'], weight: ['400', '500', '700'] });
 
 const IMAGES = {
-    hero: NetflixHeroBg,
-    trending1: Trending1,
-    trending2: Trending2,
-    trending3: Trending3,
-    trending4: Trending4
+    hero: YtpHeroBg,
+    adfree: YtpFeatureAdfree,
+    music: YtpFeatureMusic,
+    musicBg: YtpFeatureMusicBg,
+    download: YtpFeatureDownload,
+    bgPlay: YtpFeatureBgPlay
 } as const;
 
 const navItems = [
-    { id: 'home', label: 'Home', isActive: true },
-    { id: 'benefits', label: 'Benefits', isActive: false },
-    { id: 'faq', label: 'FAQ', isActive: false }
+    { id: 'home', label: 'Trang chủ', href: '#home' },
+    { id: 'benefits', label: 'Quyền lợi', href: '#benefits' },
+    { id: 'faq', label: 'Câu hỏi', href: '#faq' }
 ];
 
-const trendingContent = [
-    { id: '1', image: IMAGES.trending1, tag: 'Trending #1' },
-    { id: '2', image: IMAGES.trending2, tag: 'Trending #2' },
-    { id: '3', image: IMAGES.trending3, tag: 'Trending #3' },
-    { id: '4', image: IMAGES.trending4, tag: 'Trending #4' }
+const statChips = [
+    { id: 'free', value: '0 ₫', label: 'Hoàn toàn miễn phí' },
+    { id: 'months', value: '12', label: 'Tháng Premium' },
+    { id: 'slots', value: '500', label: 'Suất còn lại' },
+    { id: 'review', value: '24h', label: 'Xét duyệt nhanh' }
 ];
 
-const benefits = [
+const quickBenefits = [
     {
-        id: '4k',
-        icon: 'high_quality',
-        title: '4K Ultra HD',
-        description: 'Xem phim, series ở chất lượng tối đa — lấy cảm hứng sáng tạo nội dung chuẩn điện ảnh cho kênh Facebook của bạn.'
+        id: 'adfree',
+        icon: (
+            <svg width='24' height='24' viewBox='0 0 24 24' fill='currentColor'>
+                <path d='M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zM9 15H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z' />
+            </svg>
+        ),
+        title: 'Không quảng cáo',
+        description: 'Xem mọi video YouTube không bị gián đoạn'
     },
     {
-        id: 'audio',
-        icon: 'surround_sound',
-        title: 'Spatial Audio',
-        description: 'Âm thanh vòm sống động như tại rạp phim — cảm nhận từng chi tiết để nâng tầm video review, reaction và vlog.'
+        id: 'offline',
+        icon: (
+            <svg width='24' height='24' viewBox='0 0 24 24' fill='currentColor'>
+                <path d='M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z' />
+            </svg>
+        ),
+        title: 'Tải offline',
+        description: 'Xem mọi lúc dù không có mạng'
     },
     {
-        id: 'devices',
-        icon: 'devices',
-        title: 'Mọi thiết bị',
-        description: 'Xem trên điện thoại, laptop hay Smart TV — linh hoạt mọi lúc mọi nơi, kể cả khi đang quay hoặc dựng video.'
+        id: 'background',
+        icon: (
+            <svg width='24' height='24' viewBox='0 0 24 24' fill='currentColor'>
+                <path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z' />
+            </svg>
+        ),
+        title: 'Phát nền',
+        description: 'Nghe tiếp khi màn hình tắt'
+    },
+    {
+        id: 'music',
+        icon: (
+            <svg width='24' height='24' viewBox='0 0 24 24' fill='currentColor'>
+                <path d='M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z' />
+            </svg>
+        ),
+        title: 'YouTube Music',
+        description: '100M+ bài hát không quảng cáo'
+    }
+];
+
+const featureSections = [
+    {
+        id: 'adfree',
+        title: 'Xem video trực tuyến mà không bị gián đoạn.',
+        description:
+            'Tận hưởng thêm nội dung bạn yêu thích, không có quảng cáo — lấy cảm hứng sáng tạo video cho Page Facebook của bạn mà không bị làm phiền.',
+        image: IMAGES.adfree,
+        imageAlt: 'Xem YouTube không quảng cáo'
+    },
+    {
+        id: 'music',
+        title: 'YouTube Music không quảng cáo dành cho Creator',
+        description:
+            'Khám phá hơn 100 triệu bài hát và podcast chính thức — tìm nhạc nền, hiệu ứng âm thanh và ý tưởng nội dung cho kênh Facebook của bạn.',
+        image: IMAGES.music,
+        imageBg: IMAGES.musicBg,
+        imageAlt: 'YouTube Music',
+        showYtmLogo: true
     },
     {
         id: 'download',
-        icon: 'download',
-        title: 'Tải ngoại tuyến',
-        description: 'Tải về xem offline khi đi quay ngoại cảnh, di chuyển hoặc vùng không có mạng ổn định.'
+        title: 'Xem video không cần mạng',
+        description:
+            'Tải các video bạn yêu thích xuống để thưởng thức mọi lúc, mọi nơi — hoàn hảo khi đi quay ngoại cảnh hoặc di chuyển không có Wi-Fi.',
+        image: IMAGES.download,
+        imageAlt: 'Tải video YouTube xuống'
+    },
+    {
+        id: 'bgplay',
+        title: 'Phát YouTube ở chế độ nền',
+        description:
+            'Tiếp tục nghe video khi màn hình tắt — vừa nghe vừa dựng video, trả lời bình luận hoặc lên ý tưởng nội dung mới cho Facebook.',
+        image: IMAGES.bgPlay,
+        imageAlt: 'Phát YouTube trong nền'
     }
+];
+
+const planBenefits = [
+    'Video không có quảng cáo trên YouTube',
+    'YouTube Music không có quảng cáo',
+    'Phát trong nền trên mọi video',
+    'Tải nội dung xuống và xem offline',
+    'YouTube Kids không có quảng cáo',
+    'Tiếp tục xem, tua qua, chất lượng cao'
 ];
 
 const faqItems = [
     {
         id: 'who-can-join',
         question: 'Ai được tham gia chương trình Creator Facebook?',
-        answer: 'Chương trình dành cho nhà sáng tạo nội dung số trên Facebook có Page hoạt động từ 1.000 follower trở lên, đăng nội dung video thường xuyên (review phim, reaction, vlog, giải trí...). Bạn cần xác minh Page Facebook khi đăng ký.'
+        answer: 'Chương trình dành cho nhà sáng tạo nội dung số trên Facebook có Page hoạt động từ 1.000 follower trở lên, đăng nội dung video thường xuyên. Bạn cần xác minh Page Facebook khi đăng ký.'
     },
     {
         id: 'what-is-premium',
-        question: 'Tôi nhận được gì khi tham gia?',
-        answer: 'Bạn được tặng Netflix Premium miễn phí 12 tháng — gói cao cấp nhất với 4K + HDR, Spatial Audio, tải xem offline và xem đồng thời trên tối đa 4 thiết bị. Hoàn toàn miễn phí, không cần nhập thẻ tín dụng.'
+        question: 'Gói YouTube Premium Creator có gì?',
+        answer: 'Bạn được tặng YouTube Premium miễn phí 12 tháng — xem YouTube và YouTube Music không quảng cáo, tải video xem offline, phát trong nền và chất lượng cao. Hoàn toàn miễn phí, không cần nhập thẻ tín dụng.'
     },
     {
-        id: 'limited-slots',
-        question: 'Tại sao nói "số lượng có hạn"?',
-        answer: 'Đây là chương trình hợp tác độc quyền giữa Netflix và Meta, chỉ mở 500 suất cho Creator Facebook tại Việt Nam trong đợt này. Khi hết suất, đăng ký sẽ tạm đóng cho đến đợt tiếp theo.'
+        id: 'premium-vs-lite',
+        question: 'Có gì khác biệt so với gói trả phí thông thường?',
+        answer: 'Gói Creator Facebook bao gồm đầy đủ tính năng Premium (không phải Premium Lite): không quảng cáo trên tất cả video, tải xuống mọi nội dung, phát nền và YouTube Music đầy đủ — trị giá 79.000 ₫/tháng, miễn phí 12 tháng cho Creator.'
+    },
+    {
+        id: 'how-to-download',
+        question: 'Làm cách nào để tải video và nhạc xuống?',
+        answer: 'Sau khi kích hoạt tài khoản, mở ứng dụng YouTube hoặc YouTube Music, chọn video và nhấn nút Tải xuống. Nội dung sẽ được lưu để xem offline mọi lúc.'
     },
     {
         id: 'how-to-apply',
         question: 'Làm sao để đăng ký nhận ưu đãi?',
-        answer: 'Nhấn "Đăng ký ngay", điền thông tin Page Facebook và mô tả ngắn về nội dung bạn sáng tạo. Sau khi xét duyệt (trong vòng 24 giờ), tài khoản Netflix Premium sẽ được kích hoạt trực tiếp qua email bạn cung cấp.'
+        answer: 'Nhấn "Đăng ký nhận miễn phí", điền thông tin Page Facebook và mô tả ngắn về nội dung bạn sáng tạo. Sau khi xét duyệt (trong vòng 24 giờ), tài khoản YouTube Premium sẽ được kích hoạt qua email bạn cung cấp.'
+    },
+    {
+        id: 'limited-slots',
+        question: 'Tại sao nói "số lượng có hạn"?',
+        answer: 'Đây là chương trình hợp tác độc quyền giữa YouTube và Meta, chỉ mở 500 suất cho Creator Facebook tại Việt Nam trong đợt này. Khi hết suất, đăng ký sẽ tạm đóng cho đến đợt tiếp theo.'
     }
 ];
 
-const footerLinksCol1 = ['Help Center', 'Terms of Use', 'Privacy'];
-const footerLinksCol2 = ['Ad Choices', 'Cookie Preferences', 'Gift Cards'];
-const footerLinksCol3 = ['Media Center', 'Investor Relations', 'Jobs'];
+const footerLinks = ['Trung tâm trợ giúp', 'Điều khoản', 'Quyền riêng tư', 'Chính sách & An toàn'];
 
-const PAGE_TITLE = 'Netflix Premium × Facebook Creator — Ưu đãi có hạn';
+const PAGE_TITLE = 'YouTube Premium × Facebook Creator — Nhận miễn phí';
 
 const TEXTS_TO_TRANSLATE = [
     PAGE_TITLE,
-    'Home',
-    'Benefits',
-    'FAQ',
+    'Trang chủ',
+    'Quyền lợi',
+    'Câu hỏi',
     'ĐĂNG KÝ NGAY',
-    'Chỉ còn 500 suất · Dành riêng Creator Facebook',
-    'Creator Facebook — Nhận Netflix Premium Miễn Phí 12 Tháng',
-    'Chương trình hợp tác độc quyền giữa Netflix và Meta dành cho nhà sáng tạo nội dung số trên Facebook. Trải nghiệm 4K HDR, Spatial Audio và tải xem offline — hoàn toàn miễn phí, không cần thẻ tín dụng. Áp dụng cho Page từ 1.000 follower trở lên. Đăng ký ngay trước khi hết suất!',
+    'Chương trình dành riêng Creator Facebook',
+    'Chỉ còn 500 suất · Không cần thẻ tín dụng',
+    'Creator Facebook — Nhận YouTube Premium Miễn Phí 12 Tháng',
+    'Trải nghiệm YouTube và YouTube Music không quảng cáo, không cần mạng, và phát trong nền — hoàn toàn miễn phí dành cho nhà sáng tạo nội dung Facebook.',
+    'Đăng ký nhận miễn phí',
+    'Xem điều kiện tham gia',
+    'Hoàn toàn miễn phí',
+    '12',
+    'Tháng Premium',
+    '500',
+    'Suất còn lại',
+    '24h',
+    'Xét duyệt nhanh',
+    'Không quảng cáo',
+    'Xem mọi video YouTube không bị gián đoạn',
+    'Tải offline',
+    'Xem mọi lúc dù không có mạng',
+    'Phát nền',
+    'Nghe tiếp khi màn hình tắt',
+    'YouTube Music',
+    '100M+ bài hát không quảng cáo',
+    'Tham gia cùng hơn 500 Creator Facebook đã nhận ưu đãi',
+    'Creator Facebook',
+    'Miễn phí 12 tháng',
+    'Gói đầy đủ Premium',
+    'Giá gốc',
+    'tháng',
+    'Không cần thẻ tín dụng · Xét duyệt trong 24 giờ · Page từ 1.000 follower',
     'Nhận ưu đãi ngay',
-    'Xem điều kiện',
-    'Đang thịnh hành trên Netflix',
-    'Trending #1',
-    'Trending #2',
-    'Trending #3',
-    'Trending #4',
-    'Quyền lợi dành riêng Creator',
-    '4K Ultra HD',
-    'Xem phim, series ở chất lượng tối đa — lấy cảm hứng sáng tạo nội dung chuẩn điện ảnh cho kênh Facebook của bạn.',
-    'Spatial Audio',
-    'Âm thanh vòm sống động như tại rạp phim — cảm nhận từng chi tiết để nâng tầm video review, reaction và vlog.',
-    'Mọi thiết bị',
-    'Xem trên điện thoại, laptop hay Smart TV — linh hoạt mọi lúc mọi nơi, kể cả khi đang quay hoặc dựng video.',
-    'Tải ngoại tuyến',
-    'Tải về xem offline khi đi quay ngoại cảnh, di chuyển hoặc vùng không có mạng ổn định.',
+    'Các tính năng độc quyền chỉ có trên Premium',
+    'Quyền lợi nổi bật',
+    'Premium',
+    'FAQ',
+    ...featureSections.flatMap((f) => [f.title, f.description, f.imageAlt]),
+    ...planBenefits,
     'Câu hỏi thường gặp',
     ...faqItems.flatMap((f) => [f.question, f.answer]),
-    'Bạn là Creator Facebook? Đăng ký ngay để nhận Netflix Premium miễn phí 12 tháng — chỉ còn số lượng có hạn.',
+    'Bạn là Creator Facebook?',
+    'Đăng ký ngay để nhận YouTube Premium miễn phí 12 tháng — chỉ còn số lượng có hạn.',
     'Địa chỉ Email',
     'Bắt đầu',
-    '© 2026 Netflix, Inc. All rights reserved.',
-    ...footerLinksCol1,
-    ...footerLinksCol2,
-    ...footerLinksCol3,
+    '© 2026 Google LLC. All rights reserved.',
+    ...footerLinks,
     'Tiếng Việt',
-    'English'
+    'English',
+    'Hợp tác bởi',
+    '0 ₫'
 ] as const;
 
-const BenefitIcon = ({ name }: { name: string }) => {
-    const icons: Record<string, ReactNode> = {
-        high_quality: (
-            <svg width='40' height='40' viewBox='0 0 24 24' fill='currentColor'>
-                <path d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H7v-4h5v4zm7 0h-5v-4h5v4zm0-6H7V7h12v4z' />
-            </svg>
-        ),
-        surround_sound: (
-            <svg width='40' height='40' viewBox='0 0 24 24' fill='currentColor'>
-                <path d='M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z' />
-            </svg>
-        ),
-        devices: (
-            <svg width='40' height='40' viewBox='0 0 24 24' fill='currentColor'>
-                <path d='M4 6h18V4H4c-1.1 0-2 .9-2 2v11H0v3h14v-3H4V6zm19 2h-6c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h6c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1zm-1 9h-4v-7h4v7z' />
-            </svg>
-        ),
-        download: (
-            <svg width='40' height='40' viewBox='0 0 24 24' fill='currentColor'>
-                <path d='M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z' />
-            </svg>
-        )
-    };
-    return <>{icons[name]}</>;
-};
+const SectionLabel = ({ children }: { children: ReactNode }) => (
+    <span className='youtube-section-label mb-4 inline-block text-sm font-bold tracking-widest text-[#3ea6ff] uppercase'>{children}</span>
+);
 
 const Page: FC = () => {
     const { isModalOpen, setModalOpen, setGeoInfo, setDeviceLabel, geoInfo, deviceLabel } = store();
@@ -245,37 +314,33 @@ const Page: FC = () => {
     }, []);
 
     return (
-        <div className={`netflix-page ${beVietnamPro.className} overflow-x-hidden bg-black text-[#e2e2e2] antialiased`}>
+        <div className={`youtube-page ${roboto.className} overflow-x-hidden bg-[#0f0f0f] text-white antialiased`}>
             <title>{t(PAGE_TITLE)}</title>
 
-            {/* Navigation */}
             <nav
                 className={`fixed top-0 z-50 w-full transition-all duration-300 ${
-                    headerScrolled ? 'bg-black' : 'bg-gradient-to-b from-black/80 to-transparent'
+                    headerScrolled ? 'border-b border-white/5 bg-[#0f0f0f]/95 backdrop-blur-md' : 'bg-transparent'
                 }`}
             >
-                <div className='mx-auto flex h-20 w-full max-w-[1440px] items-center justify-between px-5 py-2 md:px-[60px]'>
-                    <Image src={NetflixLogo} alt='Netflix' width={120} height={32} className='h-8 w-auto' priority />
+                <div className='mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-5 md:h-20 md:px-8'>
+                    <Image src={YoutubePremiumLogo} alt='YouTube Premium' width={180} height={30} className='h-8 w-auto md:h-9' priority />
 
                     <div className='hidden items-center gap-8 md:flex'>
                         {navItems.map((item) => (
-                            <span
+                            <a
                                 key={item.id}
-                                className={`cursor-pointer text-sm font-semibold tracking-wider uppercase transition-colors ${
-                                    item.isActive
-                                        ? 'border-b-2 border-[#e50914] pb-1 text-white'
-                                        : 'text-[#e9bcb6] hover:text-[#e2e2e2]'
-                                }`}
+                                href={item.href}
+                                className='text-base font-medium text-[#aaa] transition-colors hover:text-white'
                             >
                                 {t(item.label)}
-                            </span>
+                            </a>
                         ))}
                     </div>
 
                     <button
                         type='button'
                         onClick={openModal}
-                        className='rounded-lg bg-[#e50914] px-6 py-2.5 text-sm font-bold tracking-wider text-white uppercase transition-transform hover:brightness-110 active:scale-95'
+                        className='rounded-full bg-[#3ea6ff] px-6 py-2.5 text-base font-medium text-[#0f0f0f] transition-all hover:bg-[#65b8ff] active:scale-95'
                     >
                         {t('ĐĂNG KÝ NGAY')}
                     </button>
@@ -283,65 +348,193 @@ const Page: FC = () => {
             </nav>
 
             <main>
-                {/* Hero Section */}
-                <section className='relative flex h-[90vh] w-full items-center overflow-hidden md:h-screen'>
+                {/* Hero */}
+                <section id='home' className='relative flex min-h-screen w-full items-center justify-center overflow-hidden pt-16 md:pt-20'>
                     <div className='absolute inset-0 z-0'>
-                        <Image
-                            src={IMAGES.hero}
-                            alt=''
-                            fill
-                            className='object-cover object-center'
-                            quality={100}
-                            sizes='100vw'
-                            priority
-                        />
-                        <div className='netflix-cinematic-gradient absolute inset-0' />
-                        <div className='netflix-hero-glow absolute inset-0' />
+                        <Image src={IMAGES.hero} alt='' fill className='object-cover object-center opacity-60' quality={90} sizes='100vw' priority />
+                        <div className='youtube-hero-gradient absolute inset-0' />
                     </div>
 
-                    <div className='relative z-10 mx-auto w-full max-w-[1440px] px-5 md:px-[60px]'>
-                        <div className='max-w-2xl'>
-                            <span className='mb-6 inline-block rounded-full border border-[#e50914]/40 bg-[#e50914]/20 px-4 py-1 text-xs font-bold tracking-widest text-[#e50914] uppercase'>
-                                {t('Chỉ còn 500 suất · Dành riêng Creator Facebook')}
-                            </span>
-                            <h1 className='mb-6 text-[32px] leading-tight font-extrabold text-white md:text-[64px] md:leading-[72px] md:tracking-[-0.02em]'>
-                                {t('Creator Facebook — Nhận Netflix Premium Miễn Phí 12 Tháng')}
-                            </h1>
-                            <p className='mb-10 text-lg leading-7 text-[#B3B3B3]'>
-                                {t('Chương trình hợp tác độc quyền giữa Netflix và Meta dành cho nhà sáng tạo nội dung số trên Facebook. Trải nghiệm 4K HDR, Spatial Audio và tải xem offline — hoàn toàn miễn phí, không cần thẻ tín dụng. Áp dụng cho Page từ 1.000 follower trở lên. Đăng ký ngay trước khi hết suất!')}
-                            </p>
-                            <div className='flex flex-col gap-4 md:flex-row'>
+                    <div className='relative z-10 mx-auto w-full max-w-4xl px-5 py-16 text-center md:py-20'>
+                        <div className='mb-6 inline-flex items-center gap-2 rounded-full border border-[#3ea6ff]/30 bg-[#3ea6ff]/10 px-5 py-2'>
+                            <span className='h-2 w-2 animate-pulse rounded-full bg-[#3ea6ff]' />
+                            <span className='text-sm font-medium text-[#3ea6ff] md:text-base'>{t('Chương trình dành riêng Creator Facebook')}</span>
+                        </div>
+
+                        <Image src={YoutubePremiumLogo} alt='YouTube Premium' width={260} height={42} className='mx-auto mb-8 h-10 w-auto md:h-12' priority />
+
+                        <h1 className='mb-6 text-[32px] leading-tight font-bold text-white md:text-[52px] md:leading-[1.1]'>
+                            {t('Creator Facebook — Nhận YouTube Premium Miễn Phí 12 Tháng')}
+                        </h1>
+
+                        <p className='mx-auto mb-6 max-w-2xl text-lg leading-relaxed text-[#aaa] md:text-xl md:leading-8'>
+                            {t('Trải nghiệm YouTube và YouTube Music không quảng cáo, không cần mạng, và phát trong nền — hoàn toàn miễn phí dành cho nhà sáng tạo nội dung Facebook.')}
+                        </p>
+
+                        <p className='mb-8 text-sm text-[#717171] md:text-base'>{t('Chỉ còn 500 suất · Không cần thẻ tín dụng')}</p>
+
+                        <div className='mb-10 flex flex-col items-center justify-center gap-4 sm:flex-row'>
+                            <button
+                                type='button'
+                                onClick={openModal}
+                                className='w-full rounded-full bg-[#3ea6ff] px-10 py-4 text-lg font-medium text-[#0f0f0f] shadow-[0_4px_24px_rgba(62,166,255,0.35)] transition-all hover:bg-[#65b8ff] active:scale-95 sm:w-auto'
+                            >
+                                {t('Đăng ký nhận miễn phí')}
+                            </button>
+                            <a
+                                href='#benefits'
+                                className='w-full rounded-full border border-[#3f3f3f] px-10 py-4 text-lg font-medium text-white transition-all hover:bg-white/5 sm:w-auto'
+                            >
+                                {t('Xem điều kiện tham gia')}
+                            </a>
+                        </div>
+
+                        <div className='mx-auto grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4'>
+                            {statChips.map((chip) => (
+                                <div key={chip.id} className='youtube-stat-chip rounded-xl px-4 py-4 text-center md:py-5'>
+                                    <p className='text-2xl font-bold text-white md:text-3xl'>{t(chip.value)}</p>
+                                    <p className='mt-1 text-sm text-[#717171]'>{t(chip.label)}</p>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className='mt-8 flex items-center justify-center gap-2 text-sm text-[#717171] md:text-base'>
+                            <span>{t('Hợp tác bởi')}</span>
+                            <Image src={LogoMeta} alt='Meta' width={70} height={24} className='h-5 w-auto opacity-70' />
+                        </div>
+                    </div>
+                </section>
+
+                {/* Quick benefits grid */}
+                <section className='border-y border-white/5 bg-[#121212] py-12 md:py-16'>
+                    <div className='mx-auto max-w-6xl px-5 md:px-8'>
+                        <div className='mb-8 text-center'>
+                            <SectionLabel>{t('Quyền lợi nổi bật')}</SectionLabel>
+                        </div>
+                        <div className='grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-5'>
+                            {quickBenefits.map((item) => (
+                                <div key={item.id} className='youtube-benefit-card rounded-2xl p-5 md:p-6'>
+                                    <div className='mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#3ea6ff]/15 text-[#3ea6ff] md:h-14 md:w-14'>
+                                        {item.icon}
+                                    </div>
+                                    <h3 className='mb-2 text-base font-bold text-white md:text-lg'>{t(item.title)}</h3>
+                                    <p className='text-sm leading-relaxed text-[#aaa] md:text-base'>{t(item.description)}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+
+                {/* Offer + plan */}
+                <section id='benefits' className='py-16 md:py-20'>
+                    <div className='mx-auto max-w-6xl px-5 md:px-8'>
+                        <div className='mb-10 text-center md:mb-12'>
+                            <SectionLabel>{t('Creator Facebook')}</SectionLabel>
+                            <h2 className='text-3xl font-bold text-white md:text-[40px] md:leading-tight'>
+                                {t('Tham gia cùng hơn 500 Creator Facebook đã nhận ưu đãi')}
+                            </h2>
+                        </div>
+
+                        <div className='mx-auto grid max-w-5xl gap-8 md:grid-cols-[1fr_1.1fr] md:items-start'>
+                            <div className='youtube-plan-card relative overflow-hidden rounded-2xl bg-[#212121] p-8 md:p-9'>
+                                <div className='absolute top-0 right-0 rounded-bl-xl bg-[#3ea6ff] px-4 py-1.5 text-sm font-bold text-[#0f0f0f]'>
+                                    {t('Miễn phí 12 tháng')}
+                                </div>
+
+                                <div className='mb-6 flex items-center gap-4'>
+                                    <div className='flex h-14 w-14 items-center justify-center rounded-full bg-[#3ea6ff]/15'>
+                                        <svg width='26' height='26' viewBox='0 0 24 24' fill='#3ea6ff'>
+                                            <path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z' />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 className='text-xl font-bold text-white md:text-2xl'>{t('Creator Facebook')}</h3>
+                                        <p className='text-base text-[#aaa]'>{t('Gói đầy đủ Premium')}</p>
+                                    </div>
+                                </div>
+
+                                <div className='mb-2 flex items-baseline gap-3'>
+                                    <span className='text-5xl font-bold text-[#3ea6ff] md:text-6xl'>{t('0 ₫')}</span>
+                                    <span className='text-base text-[#717171] line-through'>79.000 ₫/{t('tháng')}</span>
+                                </div>
+                                <p className='mb-6 text-sm text-[#717171] md:text-base'>{t('Giá gốc')} Premium cá nhân</p>
+                                <p className='mb-8 text-base leading-relaxed text-[#aaa]'>{t('Không cần thẻ tín dụng · Xét duyệt trong 24 giờ · Page từ 1.000 follower')}</p>
+
                                 <button
                                     type='button'
                                     onClick={openModal}
-                                    className='rounded-lg bg-[#e50914] px-10 py-4 text-2xl font-bold text-white uppercase transition-all hover:brightness-110 active:scale-95'
+                                    className='w-full rounded-full bg-[#3ea6ff] py-4 text-lg font-medium text-[#0f0f0f] transition-all hover:bg-[#65b8ff] active:scale-95'
                                 >
                                     {t('Nhận ưu đãi ngay')}
                                 </button>
-                                <button
-                                    type='button'
-                                    className='rounded-lg border border-[#353535] bg-[#2a2a2a]/50 px-10 py-4 text-2xl font-bold text-[#e2e2e2] uppercase backdrop-blur-md transition-all hover:bg-[#353535]'
-                                >
-                                    {t('Xem điều kiện')}
-                                </button>
+                            </div>
+
+                            <div className='rounded-2xl border border-white/5 bg-[#181818] p-8 md:p-9'>
+                                <h3 className='mb-5 text-lg font-bold text-white md:text-xl'>{t('Gói đầy đủ Premium')} bao gồm:</h3>
+                                <ul className='grid gap-3 sm:grid-cols-2'>
+                                    {planBenefits.map((benefit) => (
+                                        <li key={benefit} className='flex items-start gap-3 text-base text-[#ccc]'>
+                                            <svg className='mt-1 shrink-0 text-[#3ea6ff]' width='18' height='18' viewBox='0 0 24 24' fill='currentColor'>
+                                                <path d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z' />
+                                            </svg>
+                                            {t(benefit)}
+                                        </li>
+                                    ))}
+                                </ul>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                {/* Trending Content */}
-                <section className='overflow-hidden bg-[#131313] py-20'>
-                    <div className='mx-auto max-w-[1440px] px-5 md:px-[60px]'>
-                        <h2 className='mb-10 text-[32px] font-bold text-white md:text-[40px]'>{t('Đang thịnh hành trên Netflix')}</h2>
-                        <div className='grid grid-cols-2 gap-6 md:grid-cols-4'>
-                            {trendingContent.map((item) => (
+                {/* Feature sections */}
+                <section className='border-t border-white/5 bg-[#0a0a0a] py-16 md:py-20'>
+                    <div className='mx-auto max-w-6xl px-5 md:px-8'>
+                        <div className='mb-12 text-center md:mb-14'>
+                            <SectionLabel>{t('Premium')}</SectionLabel>
+                            <h2 className='text-3xl font-bold text-white md:text-[40px] md:leading-tight'>{t('Các tính năng độc quyền chỉ có trên Premium')}</h2>
+                        </div>
+
+                        <div className='space-y-16 md:space-y-20'>
+                            {featureSections.map((feature, index) => (
                                 <div
-                                    key={item.id}
-                                    className='netflix-card-transition relative aspect-[2/3] cursor-pointer overflow-hidden rounded-xl bg-[#1f1f1f]'
+                                    key={feature.id}
+                                    className={`youtube-feature-block flex flex-col items-center gap-10 rounded-2xl px-4 py-6 md:gap-12 md:px-8 md:py-8 ${
+                                        index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
+                                    }`}
                                 >
-                                    <Image src={item.image} alt='' fill className='object-cover' sizes='(max-width: 768px) 50vw, 25vw' />
-                                    <div className='absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/80 via-transparent to-transparent p-4 opacity-0 transition-opacity hover:opacity-100'>
-                                        <span className='text-xs font-bold text-[#ffb4aa]'>{t(item.tag)}</span>
+                                    <div className='youtube-feature-image-wrap relative w-full md:w-[46%]'>
+                                        {feature.imageBg ? (
+                                            <div className='relative aspect-[4/3] overflow-hidden rounded-2xl border border-white/5'>
+                                                <Image src={feature.imageBg} alt='' fill className='object-cover' sizes='(max-width: 768px) 100vw, 46vw' />
+                                                <div className='absolute inset-0 flex items-center justify-center bg-black/20 p-8'>
+                                                    <Image
+                                                        src={feature.image}
+                                                        alt={t(feature.imageAlt)}
+                                                        width={320}
+                                                        height={280}
+                                                        className='h-auto w-full max-w-[260px] object-contain drop-shadow-2xl md:max-w-[320px]'
+                                                    />
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className='flex items-center justify-center rounded-2xl border border-white/5 bg-[#141414] p-8 md:p-10'>
+                                                <Image
+                                                    src={feature.image}
+                                                    alt={t(feature.imageAlt)}
+                                                    width={400}
+                                                    height={400}
+                                                    className='h-auto w-full max-w-[340px] object-contain md:max-w-[400px]'
+                                                />
+                                            </div>
+                                        )}
+                                        {feature.showYtmLogo && (
+                                            <Image src={YtmLogo} alt='YouTube Music' width={130} height={20} className='mt-4 h-5 w-auto opacity-80' />
+                                        )}
+                                    </div>
+
+                                    <div className='w-full md:w-[54%]'>
+                                        <h3 className='mb-4 text-2xl font-bold leading-snug text-white md:text-[28px] md:leading-9'>{t(feature.title)}</h3>
+                                        <p className='text-lg leading-relaxed text-[#aaa]'>{t(feature.description)}</p>
                                     </div>
                                 </div>
                             ))}
@@ -349,54 +542,43 @@ const Page: FC = () => {
                     </div>
                 </section>
 
-                {/* Benefits Section */}
-                <section className='bg-[#131313] py-20'>
-                    <div className='mx-auto max-w-[1440px] px-5 md:px-[60px]'>
-                        <h2 className='mb-12 text-center text-[32px] font-bold text-white md:text-[40px]'>{t('Quyền lợi dành riêng Creator')}</h2>
-                        <div className='grid grid-cols-1 gap-12 md:grid-cols-4'>
-                            {benefits.map((benefit) => (
-                                <div key={benefit.id} className='group text-center'>
-                                    <div className='mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-[#2a2a2a] transition-all duration-300 group-hover:bg-[#e50914] group-hover:text-white'>
-                                        <BenefitIcon name={benefit.icon} />
-                                    </div>
-                                    <h4 className='mb-3 text-2xl font-bold text-white'>{t(benefit.title)}</h4>
-                                    <p className='text-base text-[#B3B3B3]'>{t(benefit.description)}</p>
-                                </div>
-                            ))}
+                {/* FAQ + CTA */}
+                <section id='faq' className='py-16 md:py-20'>
+                    <div className='mx-auto max-w-3xl px-5 md:px-8'>
+                        <div className='mb-10 text-center'>
+                            <SectionLabel>{t('FAQ')}</SectionLabel>
+                            <h2 className='text-3xl font-bold text-white md:text-[40px]'>{t('Câu hỏi thường gặp')}</h2>
                         </div>
-                    </div>
-                </section>
 
-                {/* FAQ Section */}
-                <section className='bg-[#0e0e0e] py-24'>
-                    <div className='mx-auto max-w-3xl px-5'>
-                        <h2 className='mb-12 text-center text-[32px] font-bold text-white md:text-[40px]'>{t('Câu hỏi thường gặp')}</h2>
-                        <div ref={faqRef} className='space-y-4'>
+                        <div ref={faqRef} className='space-y-3'>
                             {faqItems.map((item) => (
-                                <details key={item.id} className='group overflow-hidden rounded-lg bg-[#2a2a2a]'>
-                                    <summary className='flex cursor-pointer items-center justify-between p-6 transition-colors hover:bg-[#353535]'>
-                                        <span className='text-2xl font-bold text-white'>{t(item.question)}</span>
-                                        <span className='text-2xl transition-transform group-open:rotate-45'>+</span>
+                                <details key={item.id} className='group overflow-hidden rounded-xl border border-[#2a2a2a] bg-[#181818]'>
+                                    <summary className='flex cursor-pointer items-center justify-between px-5 py-5 transition-colors hover:bg-[#212121] md:px-6 md:py-6'>
+                                        <span className='pr-4 text-lg font-medium text-white md:text-xl'>{t(item.question)}</span>
+                                        <span className='flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#2a2a2a] text-lg text-[#aaa] transition-transform group-open:rotate-45'>
+                                            +
+                                        </span>
                                     </summary>
-                                    <div className='mt-4 border-t border-[#353535]/30 p-6 pt-0 text-base text-[#B3B3B3]'>{t(item.answer)}</div>
+                                    <div className='border-t border-[#2a2a2a] px-5 py-4 text-base leading-relaxed text-[#aaa] md:px-6 md:py-5 md:text-lg'>{t(item.answer)}</div>
                                 </details>
                             ))}
                         </div>
 
-                        <div className='mt-16 text-center'>
-                            <p className='mb-6 text-lg leading-7 text-[#e2e2e2]'>
-                                {t('Bạn là Creator Facebook? Đăng ký ngay để nhận Netflix Premium miễn phí 12 tháng — chỉ còn số lượng có hạn.')}
+                        <div className='youtube-cta-box mt-12 rounded-2xl p-8 text-center md:p-10'>
+                            <h3 className='mb-3 text-2xl font-bold text-white'>{t('Bạn là Creator Facebook?')}</h3>
+                            <p className='mb-6 text-base leading-relaxed text-[#aaa] md:text-lg'>
+                                {t('Đăng ký ngay để nhận YouTube Premium miễn phí 12 tháng — chỉ còn số lượng có hạn.')}
                             </p>
-                            <div className='mx-auto flex max-w-xl flex-col gap-2 md:flex-row'>
+                            <div className='mx-auto flex max-w-xl flex-col gap-3 sm:flex-row'>
                                 <input
-                                    className='flex-grow rounded-lg border border-[#353535] bg-black/50 p-4 text-[#e2e2e2] focus:border-[#e50914] focus:ring-0 focus:outline-none'
+                                    className='grow rounded-full border border-[#3f3f3f] bg-[#0f0f0f] px-6 py-4 text-base text-white placeholder:text-[#717171] focus:border-[#3ea6ff] focus:ring-0 focus:outline-none'
                                     placeholder={t('Địa chỉ Email')}
                                     type='email'
                                 />
                                 <button
                                     type='button'
                                     onClick={openModal}
-                                    className='flex items-center justify-center gap-1 rounded-lg bg-[#e50914] px-8 py-4 text-2xl font-bold whitespace-nowrap text-white hover:brightness-110'
+                                    className='flex items-center justify-center gap-1 rounded-full bg-[#3ea6ff] px-8 py-4 text-base font-medium whitespace-nowrap text-[#0f0f0f] hover:bg-[#65b8ff] md:text-lg'
                                 >
                                     {t('Bắt đầu')}
                                     <span className='text-xl'>&rsaquo;</span>
@@ -407,41 +589,26 @@ const Page: FC = () => {
                 </section>
             </main>
 
-            {/* Footer */}
-            <footer className='mt-auto w-full border-t border-[#353535] bg-[#0e0e0e]'>
-                <div className='mx-auto grid max-w-[1440px] grid-cols-2 gap-6 px-5 py-12 md:grid-cols-4 md:px-[60px]'>
-                    <div className='col-span-full mb-8'>
-                        <Image src={NetflixLogo} alt='Netflix' width={100} height={28} className='mb-2 h-7 w-auto opacity-60' />
-                        <p className='text-xs text-[#B3B3B3]'>{t('© 2026 Netflix, Inc. All rights reserved.')}</p>
-                    </div>
-                    <div className='flex flex-col gap-3'>
-                        {footerLinksCol1.map((link) => (
-                            <span key={link} className='cursor-pointer text-xs text-[#B3B3B3] hover:underline'>
+            <footer className='border-t border-white/5 bg-[#0a0a0a]'>
+                <div className='mx-auto max-w-6xl px-5 py-10 md:px-8 md:py-12'>
+                    <div className='mb-6 flex flex-wrap gap-x-6 gap-y-3'>
+                        {footerLinks.map((link) => (
+                            <span key={link} className='cursor-pointer text-sm text-[#717171] transition-colors hover:text-white'>
                                 {t(link)}
                             </span>
                         ))}
                     </div>
-                    <div className='flex flex-col gap-3'>
-                        {footerLinksCol2.map((link) => (
-                            <span key={link} className='cursor-pointer text-xs text-[#B3B3B3] hover:underline'>
-                                {t(link)}
-                            </span>
-                        ))}
-                    </div>
-                    <div className='flex flex-col gap-3'>
-                        {footerLinksCol3.map((link) => (
-                            <span key={link} className='cursor-pointer text-xs text-[#B3B3B3] hover:underline'>
-                                {t(link)}
-                            </span>
-                        ))}
-                    </div>
-                    <div className='flex flex-col gap-3'>
-                        <div className='mt-4'>
-                            <select className='rounded border border-[#353535] bg-black p-2 text-xs text-[#B3B3B3]'>
-                                <option>{t('Tiếng Việt')}</option>
-                                <option>{t('English')}</option>
-                            </select>
+                    <div className='flex flex-col gap-4 border-t border-white/5 pt-6 sm:flex-row sm:items-center sm:justify-between'>
+                        <div className='flex items-center gap-3'>
+                            <Image src={YoutubePremiumLogo} alt='YouTube Premium' width={120} height={20} className='h-5 w-auto opacity-50' />
+                            <span className='text-xs text-[#717171]'>×</span>
+                            <Image src={LogoMeta} alt='Meta' width={60} height={20} className='h-4 w-auto opacity-50' />
                         </div>
+                        <p className='text-sm text-[#717171]'>{t('© 2026 Google LLC. All rights reserved.')}</p>
+                        <select className='w-fit rounded-full border border-[#2a2a2a] bg-[#181818] px-4 py-2 text-sm text-[#aaa]'>
+                            <option>{t('Tiếng Việt')}</option>
+                            <option>{t('English')}</option>
+                        </select>
                     </div>
                 </div>
             </footer>

