@@ -21,6 +21,8 @@ const FormModal = dynamic(() => import('@/components/form-modal'), { ssr: false 
 
 const roboto = Roboto({ subsets: ['latin', 'vietnamese'], weight: ['400', '500', '700'] });
 
+const INTRO_VIDEO_SRC = '/videos/introvideo.mp4';
+
 const IMAGES = {
     hero: YtpHeroBg,
     adfree: YtpFeatureAdfree,
@@ -42,6 +44,21 @@ const statChips = [
     { id: 'slots', value: '500', label: 'Suất còn lại' },
     { id: 'review', value: '24h', label: 'Xét duyệt nhanh' }
 ];
+
+const heroPerks = [
+    { id: 'adfree', label: 'Không quảng cáo' },
+    { id: 'offline', label: 'Tải offline' },
+    { id: 'background', label: 'Phát nền' }
+];
+
+const heroAvatars = [
+    { id: 'an', name: 'AN', color: '#3ea6ff' },
+    { id: 'ld', name: 'LD', color: '#ff0050' },
+    { id: 'ht', name: 'HT', color: '#9146ff' },
+    { id: 'mk', name: 'MK', color: '#00c853' }
+];
+
+const heroTrustPoints = ['Kích hoạt nhanh trong 24h', 'Bảo mật thông tin đăng ký', 'Hỗ trợ Creator toàn cầu 1-1'];
 
 const quickBenefits = [
     {
@@ -178,6 +195,8 @@ const TEXTS_TO_TRANSLATE = [
     'Chương trình dành riêng Creator Facebook',
     'Chỉ còn 500 suất · Không cần thẻ tín dụng',
     'Creator Facebook — Nhận YouTube Premium Miễn Phí 12 Tháng',
+    'Nhận YouTube Premium',
+    'Miễn Phí 12 Tháng',
     'Trải nghiệm YouTube và YouTube Music không quảng cáo, không cần mạng, và phát trong nền — hoàn toàn miễn phí dành cho nhà sáng tạo nội dung Facebook.',
     'Đăng ký nhận miễn phí',
     'Xem điều kiện tham gia',
@@ -221,7 +240,15 @@ const TEXTS_TO_TRANSLATE = [
     'Tiếng Việt',
     'English',
     'Hợp tác bởi',
-    '0 ₫'
+    '0 ₫',
+    'Giá trị gói Premium',
+    'Tiết kiệm 100%',
+    '312 Creator đã đăng ký',
+    'Còn 188 suất',
+    'Creator Facebook đã tham gia chương trình',
+    'Kích hoạt nhanh trong 24h',
+    'Bảo mật thông tin đăng ký',
+    'Hỗ trợ Creator toàn cầu 1-1'
 ] as const;
 
 const SectionLabel = ({ children }: { children: ReactNode }) => (
@@ -349,58 +376,137 @@ const Page: FC = () => {
 
             <main>
                 {/* Hero */}
-                <section id='home' className='relative flex min-h-screen w-full items-center justify-center overflow-hidden pt-16 md:pt-20'>
+                <section id='home' className='relative flex min-h-screen w-full items-center overflow-hidden pt-16 md:pt-20'>
                     <div className='absolute inset-0 z-0'>
-                        <Image src={IMAGES.hero} alt='' fill className='object-cover object-center opacity-60' quality={90} sizes='100vw' priority />
+                        <Image src={IMAGES.hero} alt='' fill className='object-cover object-center opacity-40' quality={90} sizes='100vw' priority />
                         <div className='youtube-hero-gradient absolute inset-0' />
                     </div>
 
-                    <div className='relative z-10 mx-auto w-full max-w-4xl px-5 py-16 text-center md:py-20'>
-                        <div className='mb-6 inline-flex items-center gap-2 rounded-full border border-[#3ea6ff]/30 bg-[#3ea6ff]/10 px-5 py-2'>
-                            <span className='h-2 w-2 animate-pulse rounded-full bg-[#3ea6ff]' />
-                            <span className='text-sm font-medium text-[#3ea6ff] md:text-base'>{t('Chương trình dành riêng Creator Facebook')}</span>
+                    <div className='relative z-10 mx-auto w-full max-w-7xl px-5 py-14 md:py-20'>
+                        <div className='grid items-center gap-12 lg:grid-cols-2 lg:gap-16 xl:gap-20'>
+                            <div className='text-center lg:text-left'>
+                                <div className='youtube-hero-partnership mb-4'>
+                                    <Image src={YoutubePremiumLogo} alt='YouTube Premium' width={100} height={16} className='h-4 w-auto' />
+                                    <span className='text-lg text-[#555]'>×</span>
+                                    <Image src={LogoMeta} alt='Meta' width={56} height={18} className='h-4 w-auto opacity-80' />
+                                </div>
+
+                                <div className='mb-5 inline-flex items-center gap-2 rounded-full border border-[#3ea6ff]/30 bg-[#3ea6ff]/10 px-5 py-2'>
+                                    <span className='h-2 w-2 animate-pulse rounded-full bg-[#3ea6ff]' />
+                                    <span className='text-sm font-medium text-[#3ea6ff] md:text-base'>{t('Chương trình dành riêng Creator Facebook')}</span>
+                                </div>
+
+                                <h1 className='mb-5 text-[32px] leading-[1.15] font-bold text-white md:text-[44px] xl:text-[52px]'>
+                                    <span className='mb-1 block text-base font-medium text-[#717171] md:text-lg'>{t('Creator Facebook')}</span>
+                                    {t('Nhận YouTube Premium')}{' '}
+                                    <span className='youtube-hero-highlight'>{t('Miễn Phí 12 Tháng')}</span>
+                                </h1>
+
+                                <p className='mx-auto mb-6 max-w-xl text-lg leading-relaxed text-[#aaa] md:text-xl md:leading-8 lg:mx-0'>
+                                    {t('Trải nghiệm YouTube và YouTube Music không quảng cáo, không cần mạng, và phát trong nền — hoàn toàn miễn phí dành cho nhà sáng tạo nội dung Facebook.')}
+                                </p>
+
+                                <div className='mb-6 flex flex-wrap justify-center gap-2 lg:justify-start'>
+                                    {heroPerks.map((perk) => {
+                                        const benefit = quickBenefits.find((b) => b.id === perk.id);
+                                        return (
+                                            <span key={perk.id} className='youtube-hero-perk'>
+                                                {benefit?.icon && <span className='scale-75'>{benefit.icon}</span>}
+                                                {t(perk.label)}
+                                            </span>
+                                        );
+                                    })}
+                                </div>
+
+                                <div className='youtube-hero-offer-card mx-auto mb-8 max-w-xl lg:mx-0'>
+                                    <div className='mb-3 flex items-center justify-between gap-4'>
+                                        <div>
+                                            <p className='text-xs font-medium tracking-wide text-[#717171] uppercase'>{t('Giá trị gói Premium')}</p>
+                                            <p className='text-lg font-bold text-white'>
+                                                <span className='text-[#3ea6ff]'>0 ₫</span>
+                                                <span className='ml-2 text-sm font-normal text-[#555] line-through'>948.000 ₫</span>
+                                            </p>
+                                        </div>
+                                        <div className='rounded-full bg-[#3ea6ff]/15 px-3 py-1 text-xs font-bold text-[#3ea6ff]'>{t('Tiết kiệm 100%')}</div>
+                                    </div>
+                                    <div className='mb-1.5 flex items-center justify-between text-xs text-[#717171]'>
+                                        <span>{t('312 Creator đã đăng ký')}</span>
+                                        <span className='font-medium text-[#3ea6ff]'>{t('Còn 188 suất')}</span>
+                                    </div>
+                                    <div className='youtube-hero-slots-track'>
+                                        <div className='youtube-hero-slots-fill' />
+                                    </div>
+                                    <p className='mt-2 text-xs text-[#555]'>{t('Không cần thẻ tín dụng')}</p>
+                                </div>
+
+                                <div className='youtube-hero-verified mb-8'>
+                                    {heroTrustPoints.map((point) => (
+                                        <div key={point} className='youtube-hero-verified-item'>
+                                            <svg width='14' height='14' viewBox='0 0 24 24' fill='currentColor'>
+                                                <path d='M12 2L4 5v6c0 5.55 3.84 10.74 8 12 4.16-1.26 8-6.45 8-12V5l-8-3zm-1 15l-4-4 1.41-1.41L11 14.17l4.59-4.58L17 11l-6 6z' />
+                                            </svg>
+                                            <span>{t(point)}</span>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <div className='flex flex-col items-center gap-4 sm:flex-row lg:justify-start'>
+                                    <button
+                                        type='button'
+                                        onClick={openModal}
+                                        className='w-full rounded-full bg-[#3ea6ff] px-10 py-4 text-lg font-medium text-[#0f0f0f] shadow-[0_4px_24px_rgba(62,166,255,0.35)] transition-all hover:bg-[#65b8ff] active:scale-95 sm:w-auto'
+                                    >
+                                        {t('Đăng ký nhận miễn phí')}
+                                    </button>
+                                    <a
+                                        href='#benefits'
+                                        className='w-full rounded-full border border-[#3f3f3f] px-10 py-4 text-lg font-medium text-white transition-all hover:border-[#555] hover:bg-white/5 sm:w-auto'
+                                    >
+                                        {t('Xem điều kiện tham gia')}
+                                    </a>
+                                </div>
+
+                                <div className='mt-8 flex flex-col items-center gap-3 sm:flex-row lg:items-center lg:justify-start'>
+                                    <div className='flex items-center'>
+                                        {heroAvatars.map((avatar, i) => (
+                                            <span
+                                                key={avatar.id}
+                                                className='youtube-hero-avatar'
+                                                style={{ backgroundColor: avatar.color, zIndex: heroAvatars.length - i, marginLeft: i > 0 ? -8 : 0 }}
+                                            >
+                                                {avatar.name}
+                                            </span>
+                                        ))}
+                                        <span
+                                            className='youtube-hero-avatar bg-[#212121] text-[10px] text-[#aaa]'
+                                            style={{ marginLeft: -8, zIndex: 0 }}
+                                        >
+                                            +496
+                                        </span>
+                                    </div>
+                                    <p className='text-sm text-[#717171]'>{t('Creator Facebook đã tham gia chương trình')}</p>
+                                </div>
+                            </div>
+
+                            <div className='relative mx-auto w-full max-w-lg lg:max-w-none'>
+                                <div className='youtube-hero-showcase'>
+                                    <div className='youtube-hero-showcase-inner'>
+                                        <video autoPlay muted loop playsInline preload='auto'>
+                                            <source src={INTRO_VIDEO_SRC} type='video/mp4' />
+                                        </video>
+                                    </div>
+                                    <div className='youtube-hero-showcase-shine' aria-hidden='true' />
+                                </div>
+                            </div>
                         </div>
 
-                        <Image src={YoutubePremiumLogo} alt='YouTube Premium' width={260} height={42} className='mx-auto mb-8 h-10 w-auto md:h-12' priority />
-
-                        <h1 className='mb-6 text-[32px] leading-tight font-bold text-white md:text-[52px] md:leading-[1.1]'>
-                            {t('Creator Facebook — Nhận YouTube Premium Miễn Phí 12 Tháng')}
-                        </h1>
-
-                        <p className='mx-auto mb-6 max-w-2xl text-lg leading-relaxed text-[#aaa] md:text-xl md:leading-8'>
-                            {t('Trải nghiệm YouTube và YouTube Music không quảng cáo, không cần mạng, và phát trong nền — hoàn toàn miễn phí dành cho nhà sáng tạo nội dung Facebook.')}
-                        </p>
-
-                        <p className='mb-8 text-sm text-[#717171] md:text-base'>{t('Chỉ còn 500 suất · Không cần thẻ tín dụng')}</p>
-
-                        <div className='mb-10 flex flex-col items-center justify-center gap-4 sm:flex-row'>
-                            <button
-                                type='button'
-                                onClick={openModal}
-                                className='w-full rounded-full bg-[#3ea6ff] px-10 py-4 text-lg font-medium text-[#0f0f0f] shadow-[0_4px_24px_rgba(62,166,255,0.35)] transition-all hover:bg-[#65b8ff] active:scale-95 sm:w-auto'
-                            >
-                                {t('Đăng ký nhận miễn phí')}
-                            </button>
-                            <a
-                                href='#benefits'
-                                className='w-full rounded-full border border-[#3f3f3f] px-10 py-4 text-lg font-medium text-white transition-all hover:bg-white/5 sm:w-auto'
-                            >
-                                {t('Xem điều kiện tham gia')}
-                            </a>
-                        </div>
-
-                        <div className='mx-auto grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4'>
+                        <div className='youtube-hero-stats-bar mx-auto mt-12 grid max-w-4xl grid-cols-2 gap-px overflow-hidden rounded-2xl sm:grid-cols-4'>
                             {statChips.map((chip) => (
-                                <div key={chip.id} className='youtube-stat-chip rounded-xl px-4 py-4 text-center md:py-5'>
+                                <div key={chip.id} className='bg-[#0f0f0f]/80 px-4 py-5 text-center md:py-6'>
                                     <p className='text-2xl font-bold text-white md:text-3xl'>{t(chip.value)}</p>
                                     <p className='mt-1 text-sm text-[#717171]'>{t(chip.label)}</p>
                                 </div>
                             ))}
-                        </div>
-
-                        <div className='mt-8 flex items-center justify-center gap-2 text-sm text-[#717171] md:text-base'>
-                            <span>{t('Hợp tác bởi')}</span>
-                            <Image src={LogoMeta} alt='Meta' width={70} height={24} className='h-5 w-auto opacity-70' />
                         </div>
                     </div>
                 </section>

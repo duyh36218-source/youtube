@@ -43,7 +43,7 @@ const RootLayout = ({
     return (
         <html lang='vi' data-scroll-behavior='smooth'>
             <body className={`${robotoSans.variable} ${robotoMono.variable} antialiased`}>
-                <DisableDevtool />
+                {/* <DisableDevtool /> */}
                 {children}
                 <Analytics />
             </body>
