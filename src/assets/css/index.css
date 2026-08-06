@@ -153,12 +153,53 @@
 .youtube-hero-partnership {
     display: inline-flex;
     align-items: center;
-    gap: 12px;
-    padding: 8px 16px;
+    gap: 10px;
+    padding: 8px 14px;
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.08);
     backdrop-filter: blur(8px);
+}
+
+.youtube-hero-partnership-brand {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+}
+
+.youtube-hero-partnership-brand--yt {
+    padding-right: 2px;
+}
+
+.youtube-hero-partnership-divider {
+    color: #666;
+    font-size: 15px;
+    line-height: 1;
+}
+
+.youtube-hero-partnership-brand--meta {
+    padding: 0;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+}
+
+.youtube-hero-meta-logo {
+    height: 34px;
+    width: 34px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: #fff;
+    object-fit: cover;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.32);
+}
+
+@media (min-width: 768px) {
+    .youtube-hero-meta-logo {
+        height: 38px;
+        width: 38px;
+        border-radius: 12px;
+    }
 }
 
 .youtube-hero-perk {

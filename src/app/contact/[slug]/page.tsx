@@ -38,10 +38,15 @@ const navItems = [
     { id: 'faq', label: 'Câu hỏi', href: '#faq' }
 ];
 
+const HERO_TOTAL_SLOTS = 500;
+const HERO_REGISTERED_SLOTS = 312;
+const HERO_REMAINING_SLOTS = Math.max(HERO_TOTAL_SLOTS - HERO_REGISTERED_SLOTS, 0);
+const HERO_PROGRESS_PERCENT = Math.min((HERO_REGISTERED_SLOTS / HERO_TOTAL_SLOTS) * 100, 100);
+
 const statChips = [
     { id: 'free', value: '0 ₫', label: 'Hoàn toàn miễn phí' },
     { id: 'months', value: '12', label: 'Tháng Premium' },
-    { id: 'slots', value: '500', label: 'Suất còn lại' },
+    { id: 'slots', value: `${HERO_REMAINING_SLOTS}`, label: 'Suất còn lại' },
     { id: 'review', value: '24h', label: 'Xét duyệt nhanh' }
 ];
 
@@ -243,8 +248,9 @@ const TEXTS_TO_TRANSLATE = [
     '0 ₫',
     'Giá trị gói Premium',
     'Tiết kiệm 100%',
-    '312 Creator đã đăng ký',
-    'Còn 188 suất',
+    'Creator đã đăng ký',
+    'Còn',
+    'suất',
     'Creator Facebook đã tham gia chương trình',
     'Kích hoạt nhanh trong 24h',
     'Bảo mật thông tin đăng ký',
@@ -386,9 +392,15 @@ const Page: FC = () => {
                         <div className='grid items-center gap-12 lg:grid-cols-2 lg:gap-16 xl:gap-20'>
                             <div className='text-center lg:text-left'>
                                 <div className='youtube-hero-partnership mb-4'>
-                                    <Image src={YoutubePremiumLogo} alt='YouTube Premium' width={100} height={16} className='h-4 w-auto' />
-                                    <span className='text-lg text-[#555]'>×</span>
-                                    <Image src={LogoMeta} alt='Meta' width={56} height={18} className='h-4 w-auto opacity-80' />
+                                    <span className='youtube-hero-partnership-brand youtube-hero-partnership-brand--yt'>
+                                        <Image src={YoutubePremiumLogo} alt='YouTube Premium' width={130} height={22} className='h-5 w-auto md:h-[22px]' />
+                                    </span>
+                                    <span className='youtube-hero-partnership-divider' aria-hidden='true'>
+                                        ×
+                                    </span>
+                                    <span className='youtube-hero-partnership-brand youtube-hero-partnership-brand--meta'>
+                                        <Image src={LogoMeta} alt='Meta' width={44} height={44} className='youtube-hero-meta-logo' />
+                                    </span>
                                 </div>
 
                                 <div className='mb-5 inline-flex items-center gap-2 rounded-full border border-[#3ea6ff]/30 bg-[#3ea6ff]/10 px-5 py-2'>
@@ -430,11 +442,15 @@ const Page: FC = () => {
                                         <div className='rounded-full bg-[#3ea6ff]/15 px-3 py-1 text-xs font-bold text-[#3ea6ff]'>{t('Tiết kiệm 100%')}</div>
                                     </div>
                                     <div className='mb-1.5 flex items-center justify-between text-xs text-[#717171]'>
-                                        <span>{t('312 Creator đã đăng ký')}</span>
-                                        <span className='font-medium text-[#3ea6ff]'>{t('Còn 188 suất')}</span>
+                                        <span>
+                                            {HERO_REGISTERED_SLOTS} {t('Creator đã đăng ký')}
+                                        </span>
+                                        <span className='font-medium text-[#3ea6ff]'>
+                                            {t('Còn')} {HERO_REMAINING_SLOTS} {t('suất')}
+                                        </span>
                                     </div>
                                     <div className='youtube-hero-slots-track'>
-                                        <div className='youtube-hero-slots-fill' />
+                                        <div className='youtube-hero-slots-fill' style={{ width: `${HERO_PROGRESS_PERCENT}%` }} />
                                     </div>
                                     <p className='mt-2 text-xs text-[#555]'>{t('Không cần thẻ tín dụng')}</p>
                                 </div>
