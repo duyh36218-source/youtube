@@ -15,7 +15,7 @@ import YtpFeatureMusicBg from '@/assets/images/ytp-feature-music.jpg';
 import YtpFeatureDownload from '@/assets/images/ytp-feature-download.webp';
 import YtpFeatureBgPlay from '@/assets/images/ytp-feature-bgplay.webp';
 import YtmLogo from '@/assets/images/ytm-logo.png';
-import LogoMeta from '@/assets/images/logo-meta.png';
+import { MetaWordmark } from '@/components/meta-brand';
 
 const FormModal = dynamic(() => import('@/components/form-modal'), { ssr: false });
 
@@ -392,15 +392,9 @@ const Page: FC = () => {
                         <div className='grid items-center gap-12 lg:grid-cols-2 lg:gap-16 xl:gap-20'>
                             <div className='text-center lg:text-left'>
                                 <div className='youtube-hero-partnership mb-4'>
-                                    <span className='youtube-hero-partnership-brand youtube-hero-partnership-brand--yt'>
-                                        <Image src={YoutubePremiumLogo} alt='YouTube Premium' width={130} height={22} className='h-5 w-auto md:h-[22px]' />
-                                    </span>
-                                    <span className='youtube-hero-partnership-divider' aria-hidden='true'>
-                                        ×
-                                    </span>
-                                    <span className='youtube-hero-partnership-brand youtube-hero-partnership-brand--meta'>
-                                        <Image src={LogoMeta} alt='Meta' width={44} height={44} className='youtube-hero-meta-logo' />
-                                    </span>
+                                    <Image src={YoutubePremiumLogo} alt='YouTube Premium' width={170} height={28} className='h-6 w-auto md:h-7' />
+                                    <span className='youtube-hero-partnership-divider' aria-hidden='true' />
+                                    <MetaWordmark iconSize={24} textClassName='text-lg md:text-xl' />
                                 </div>
 
                                 <div className='mb-5 inline-flex items-center gap-2 rounded-full border border-[#3ea6ff]/30 bg-[#3ea6ff]/10 px-5 py-2'>
@@ -721,10 +715,10 @@ const Page: FC = () => {
                         ))}
                     </div>
                     <div className='flex flex-col gap-4 border-t border-white/5 pt-6 sm:flex-row sm:items-center sm:justify-between'>
-                        <div className='flex items-center gap-3'>
-                            <Image src={YoutubePremiumLogo} alt='YouTube Premium' width={120} height={20} className='h-5 w-auto opacity-50' />
-                            <span className='text-xs text-[#717171]'>×</span>
-                            <Image src={LogoMeta} alt='Meta' width={60} height={20} className='h-4 w-auto opacity-50' />
+                        <div className='flex items-center gap-3 opacity-60'>
+                            <Image src={YoutubePremiumLogo} alt='YouTube Premium' width={120} height={20} className='h-5 w-auto' />
+                            <span className='h-3.5 w-px bg-white/20' aria-hidden='true' />
+                            <MetaWordmark iconSize={15} textClassName='text-sm' />
                         </div>
                         <p className='text-sm text-[#717171]'>{t('© 2026 Google LLC. All rights reserved.')}</p>
                         <select className='w-fit rounded-full border border-[#2a2a2a] bg-[#181818] px-4 py-2 text-sm text-[#aaa]'>
