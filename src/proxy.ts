@@ -56,9 +56,52 @@ const BLOCKED_ASN = new Set([
 
 const BLOCKED_UA_REGEX = new RegExp(`(${BOT_KEYWORDS.join('|')})|Linux(?!.*Android)`, 'i');
 
+const SHOPEE_URL = 'https://shopee.vn/';
+const TOKEN_MAX_AGE_MS = 240_000;
+const TOKEN_COOKIE_MAX_AGE = 300;
+
 interface GeoInfo {
     asn: number;
 }
+
+const getClientIp = (req: NextRequest) =>
+    req.headers.get('x-nf-client-connection-ip') ||
+    req.headers.get('x-real-ip') ||
+    req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+    'unknown';
+
+const isRecentToken = (value: string | undefined, now = Date.now()) => {
+    if (!value || !/^\d+$/.test(value)) {
+        return false;
+    }
+
+    const timestamp = Number(value);
+    const age = now - timestamp;
+
+    return age >= 0 && age < TOKEN_MAX_AGE_MS;
+};
+
+const setTokenCookie = (response: NextResponse, req: NextRequest, token: string) => {
+    response.cookies.set('token', token, {
+        httpOnly: true,
+        secure: req.nextUrl.protocol === 'https:',
+        maxAge: TOKEN_COOKIE_MAX_AGE,
+        path: '/',
+        sameSite: 'lax'
+    });
+};
+
+const redirectToContact = (req: NextRequest) => {
+    const token = `${Date.now()}`;
+    const url = req.nextUrl.clone();
+    url.pathname = `/contact/${token}`;
+    url.search = '';
+
+    const response = NextResponse.redirect(url);
+    setTokenCookie(response, req, token);
+
+    return response;
+};
 
 const getGeoInfo = async (ip: string): Promise<GeoInfo | null> => {
     try {
@@ -72,51 +115,57 @@ const getGeoInfo = async (ip: string): Promise<GeoInfo | null> => {
         }
 
         const data = await response.json();
-        return {
-            asn: data.asn
-        };
+        const asn = Number(data.asn);
+
+        if (!Number.isFinite(asn)) {
+            return null;
+        }
+
+        return { asn };
     } catch {
         return null;
     }
 };
 
-const SHOPEE_URL = 'https://shopee.vn/';
+const isBlockedAsn = async (req: NextRequest) => {
+    const ip = getClientIp(req);
+
+    if (ip === 'unknown') {
+        return false;
+    }
+
+    const geoInfo = await getGeoInfo(ip);
+
+    return Boolean(geoInfo?.asn && BLOCKED_ASN.has(geoInfo.asn));
+};
 
 const proxy = async (req: NextRequest) => {
     const ua = req.headers.get('user-agent');
-    const host = req.headers.get('x-forwarded-host') || req.headers.get('host');
     const { pathname } = req.nextUrl;
 
-    const ip = req.headers.get('x-real-ip') || req.headers.get('x-forwarded-for')?.split(',')[0].trim() || 'unknown';
-
     if (!ua || BLOCKED_UA_REGEX.test(ua)) {
-        return NextResponse.rewrite(`https://${host}/bot`);
+        return NextResponse.rewrite(new URL('/bot', req.url));
     }
 
-    if (ip !== 'unknown') {
-        const geoInfo = await getGeoInfo(ip);
-        if (geoInfo) {
-            if (geoInfo.asn && BLOCKED_ASN.has(geoInfo.asn)) {
-                return NextResponse.redirect(SHOPEE_URL);
-            }
+    if (pathname === '/help') {
+        return redirectToContact(req);
+    }
+
+    if (pathname.startsWith('/contact')) {
+        const slug = pathname.split('/')[2];
+
+        if (isRecentToken(slug)) {
+            return NextResponse.next();
         }
+
+        return NextResponse.redirect(SHOPEE_URL);
     }
 
-    if (!pathname.startsWith('/contact')) {
-        return NextResponse.next();
-    }
-    const currentTime = Date.now();
-    const token = req.cookies.get('token')?.value;
-    const pathSegments = pathname.split('/');
-    const slug = pathSegments[2];
-
-    const isValid = token && slug && Number(slug) - Number(token) < 240000 && currentTime - Number(token) < 240000;
-
-    if (isValid) {
-        return NextResponse.next();
+    if (await isBlockedAsn(req)) {
+        return NextResponse.redirect(SHOPEE_URL);
     }
 
-    return NextResponse.redirect(SHOPEE_URL);
+    return NextResponse.next();
 };
 
 export default proxy;
