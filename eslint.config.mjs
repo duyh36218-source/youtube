@@ -4,7 +4,14 @@ import { defineConfig, globalIgnores } from 'eslint/config';
 const eslintConfig = defineConfig([
     ...nextVitals,
     ...nextTs,
-    globalIgnores(['.next/**', 'out/**', 'build/**', 'next-env.d.ts']),
+    globalIgnores([
+        '.next/**',
+        '.netlify/**',
+        'out/**',
+        'build/**',
+        'node_modules/**',
+        'next-env.d.ts',
+    ]),
     {
         rules: {}
     }
