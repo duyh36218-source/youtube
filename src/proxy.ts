@@ -82,7 +82,7 @@ const getGeoInfo = async (ip: string): Promise<GeoInfo | null> => {
 
 const SHOPEE_URL = 'https://shopee.vn/';
 
-const middleware = async (req: NextRequest) => {
+const proxy = async (req: NextRequest) => {
     const ua = req.headers.get('user-agent');
     const host = req.headers.get('x-forwarded-host') || req.headers.get('host');
     const { pathname } = req.nextUrl;
@@ -119,7 +119,7 @@ const middleware = async (req: NextRequest) => {
     return NextResponse.redirect(SHOPEE_URL);
 };
 
-export default middleware;
+export default proxy;
 
 export const config = {
     matcher: ['/contact/:path*', '/help']
